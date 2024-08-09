@@ -2,7 +2,7 @@ class Ship {
   constructor(shipName, shipLength) {
     this.name = shipName;
     this.length = shipLength;
-    this.timesHit = 0;
+    this.hits = 0;
     this.isSunk = false;
     this.isFound = false;
   }
@@ -23,6 +23,11 @@ class Ship {
   getLength() {
     return this.length;
   }
+  
+  getHits() {
+    return this.hits;
+  }
+
 
   // methods
 
@@ -31,18 +36,18 @@ class Ship {
   }
 
   hit() {
-    this.timesHit += 1;
-    if (this.timesHit === this.length) {
-      this.sink();  // fixed method name from `sunk` to `sink`
+    this.hits += 1;
+    if (this.hits === this.length) {
+      this.sink(); 
     }
   }
 
-  sink() {  // fixed method name from `sunk` to `sink`
+  sink() {
     this.isSunk = true;
   }
 
   toggleFound() {
-    this.isFound = !this.isFound;  // fixed to toggle the found state correctly
+    this.isFound = !this.isFound; 
   }
 }
 
