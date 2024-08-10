@@ -8,7 +8,7 @@ class gameBoard {
     this.axis = 'X';
   }
 
-  // GETTERS
+  // getters
   getBoard() {
     return this.board;
   }
@@ -29,7 +29,7 @@ class gameBoard {
     return this.fleet.find(ship => ship.getName() === shipName);
   }
 
-  // SETTERS
+  // setters
   setAxisX() {
     this.axis = 'X';
   }
@@ -47,7 +47,7 @@ class gameBoard {
     this.fleet.forEach(ship => ship.resetFound());
   }
 
-  // FLEET
+  // methods
   addToFleet(ship) {
     let newShip;
     switch (ship.getName()) {
@@ -74,7 +74,6 @@ class gameBoard {
     this.fleet = [];
   }
 
-  // PLACEMENT
   placeX(ship, start) {
     let shipLength = ship.getLength();
     const [x, y] = start;
@@ -127,7 +126,6 @@ class gameBoard {
     return shipLength > boardLength - field;
   }
 
-  // RECORD ATTACKS
   receiveAttack(coords) {
     const [x, y] = coords;
     this.recordHit(x, y);
@@ -160,7 +158,6 @@ class gameBoard {
     }
   }
 
-  // CHECKERS
   areAllShipsFound() {
     return this.fleet.length === 5;
   }
