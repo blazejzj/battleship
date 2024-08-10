@@ -344,4 +344,4 @@ class DragDropManager {
   }
 }
 
-export default DragDropManager;
+module.exports = new DragDropManager();
