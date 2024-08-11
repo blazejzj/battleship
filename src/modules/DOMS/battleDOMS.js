@@ -7,6 +7,10 @@ import Sound from '../utils/sound';
 
 class battleDOMS {
 
+  constructor() {
+    this.isPlayerTurn = true;
+  }
+
   loadBattleContent() {
     helper.clearContent();
 
@@ -154,25 +158,47 @@ class battleDOMS {
   // HANDLERS
 
   async handleFieldClick(event) {
+    // Prevent any action if it's not player's turn
+    if (!this.isPlayerTurn) return;
+
+    console.log('Player turn starts');
+    this.isPlayerTurn = false;  // Player turn is now being processed
+
     const { target } = event;
     this.disableField(target);
 
     // Player's turn
     const playerTurn = await this.playerPlays(target);
-    if (playerTurn === 'win' || playerTurn === 'hit') return;
+    if (playerTurn === 'win' || playerTurn === 'hit') {
+        console.log('Player action ends with hit or win');
+        this.isPlayerTurn = true;  // Player's turn ends, ready for next round
+        return;
+    }
+
+    console.log('Ending player turn');
 
     // CPU's turn
     let cpuTurn = await this.cpuPlays();
-    if (cpuTurn === 'win') return;
+    if (cpuTurn === 'win') {
+        console.log('CPU turn ends with win');
+        this.isPlayerTurn = true;  // Player's turn can start again
+        return;
+    }
 
     while (cpuTurn === 'hit') {
+        console.log('CPU hits again');
         cpuTurn = await this.cpuPlays();
-        if (cpuTurn === 'win' || cpuTurn === 'miss') break; // Exit loop on miss or win
     }
-}
+
+    console.log('CPU turn ends');
+    this.isPlayerTurn = true;  // Player's turn can start again
+    console.log('Player turn ends');
+  } 
+
 
 
   async playerPlays(fieldNode) {
+    console.log('Player action begins');
     const cpu = Game.getCPU();
     const index = [...fieldNode.parentNode.children].indexOf(fieldNode);
     const [row, col] = helper.getCoordinatesFromIndex(index);
@@ -188,6 +214,7 @@ class battleDOMS {
     if (boardElement === 'x') {
         await this.playerMiss(fieldNode);
     } else {
+        console.log('Player hit');
         return await this.playerHit(fieldNode);
     }
 
@@ -195,11 +222,14 @@ class battleDOMS {
     await this.timeoutOneSecond();
     await this.turnEnd('player');
 
+    console.log('Player action ends');
     return 'miss';
   }
 
 
+
   async cpuPlays() {
+
     const player = Game.getPlayer();
     const [row, col] = player.computerTurn();
 
@@ -217,7 +247,7 @@ class battleDOMS {
         this.displayEnemyMessage(boardElement, battleship);
         await this.timeoutOneSecond();
         await this.turnEnd('cpu');
-        return 'miss'; // Ensure the loop breaks if it's a miss
+        return 'miss';
     } else {
         return await this.cpuHit(row, col);
     }
@@ -294,20 +324,23 @@ async cpuHit(row, col) {
 }
 
 
-  async turnEnd(playerOrCpu) {
+async turnEnd(playerOrCpu) {
+    console.log(`${playerOrCpu} turn ends`);
     await this.timeoutOneAndHalfSecond();
 
     if (playerOrCpu === 'player') {
-      this.styleOffTurn(document.querySelector('.message.battle.agent'));
-      this.styleOnTurn(document.querySelector('.message.battle.enemy'));
-      this.resizePlayerOffTurn();
+        this.styleOffTurn(document.querySelector('.message.battle.agent'));
+        this.styleOnTurn(document.querySelector('.message.battle.enemy'));
+        this.resizePlayerOffTurn();
     } else {
-      this.styleOffTurn(document.querySelector('.message.battle.enemy'));
-      this.styleOnTurn(document.querySelector('.message.battle.agent'));
-      this.resizePlayerOnTurn();
-      this.initBoardFields();
+        this.styleOffTurn(document.querySelector('.message.battle.enemy'));
+        this.styleOnTurn(document.querySelector('.message.battle.agent'));
+        this.resizePlayerOnTurn();
+        this.initBoardFields();
     }
-  }
+}
+
+
 
   displayPlayerShips() {
     const friendlyBoard = document.getElementById('field-container-friendly');

@@ -19,8 +19,8 @@
   }
   .field-container {
     &.field-container-enemy {
-      // background: url('../assets/images/grid.svg'),
-        background: radial-gradient(
+      background: url('../assets/images/grid.svg'),
+        radial-gradient(
           circle,
           rgba(2, 0, 36, 0) 0%,
           rgba(243, 166, 64, 0.15449929971988796) 60%,
@@ -291,4 +291,12 @@
       animation: shrink 1.5s 1 forwards;
     }
   }
+
+  .field.hit::before,
+.field.miss::before {
+    transform: none !important;
+    animation: none !important;
 }
+
+}
+

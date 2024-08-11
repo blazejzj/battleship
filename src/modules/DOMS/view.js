@@ -2,7 +2,6 @@ import pregame from './prelaunch';
 import setup from './setupManager';
 import helper from './helper';
 import DragDrop from './dragDropManager';
-import Sound from '../utils/sound';
 import Game from '../factories/battleManager';
 
 class ViewManager {

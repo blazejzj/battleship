@@ -38,9 +38,8 @@ class DragDropManager {
 
   dragEnter() {
     const fieldContainer = document.getElementById('field-container-setup');
-
     fieldContainer.childNodes.forEach((node) => {
-      node.addEventListener('dragenter', this.dragEnterHandler);
+      node.addEventListener('dragenter', this.dragEnterHandler.bind(this));
     });
   }
 
@@ -56,9 +55,8 @@ class DragDropManager {
 
   dragLeave() {
     const fieldContainer = document.getElementById('field-container-setup');
-
     fieldContainer.childNodes.forEach((node) => {
-      node.addEventListener('dragleave', this.dragLeaveHandler);
+      node.addEventListener('dragleave', this.dragLeaveHandler.bind(this));
     });
   }
 
