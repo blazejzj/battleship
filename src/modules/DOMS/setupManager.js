@@ -137,7 +137,7 @@ class SetupManager {
   }
 
   handleAxisButton(button, oppositeButton) {
-    const map = Game.getState().getPlayer().getMap();
+    const map = Game.getPlayer().getGrid();
 
     if (button.id === 'x-button') {
       map.setAxisX();
@@ -151,7 +151,7 @@ class SetupManager {
   initResetContinueButtons() {
     const resetButton = document.getElementById('reset-button');
     const continueButton = document.getElementById('continue-button');
-    const board = Game.getState().getPlayer().getMap().getBoard();
+    const board = Game.getPlayer().getGrid().getBoard();
 
     resetButton.addEventListener('click', () => this.handleReset(board));
     continueButton.addEventListener('click', this.handleContinue);
@@ -168,10 +168,10 @@ class SetupManager {
   }
 
   resetFleetSelect() {
-    const map = Game.getState().getPlayer().getMap();
+    const map = Game.getState().getPlayer().getBoard();
 
     this.resetFleetSelectMenu();
-    map.getFleet().forEach((warship) => warship.resetFound());
+    map.getFleet().forEach((warship) => warship.toggleFound());
     map.setFleetEmpty();
   }
 
@@ -206,7 +206,7 @@ class SetupManager {
   }
 
   handleContinue() {
-    if (Game.state.getPlayer().getMap().areAllShipsFound()) {
+    if (Game.getPlayer().getGrid().areAllShipsFound()) {
       Battle.loadBattleContent(); // move to the battle phase if all ships are placed
     }
   }
@@ -219,4 +219,4 @@ class SetupManager {
   }
 }
 
-module.exports = new SetupManager();
+export default new SetupManager();

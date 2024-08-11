@@ -1,5 +1,4 @@
 import helper from './helper';
-import Component from './reusables';
 
 class Prelaunch {
 
@@ -8,9 +7,8 @@ class Prelaunch {
     app.classList.add('pregame');
 
     const pregameCard = this.createPregameCard();
-    const gitHubButton = Component.createGitHubButton();
 
-    helper.appendAll(app, [pregameCard, gitHubButton]);
+    helper.appendAll(app, [pregameCard]);
   }
 
   createPregameCard() {
@@ -66,4 +64,4 @@ class Prelaunch {
   }
 }
 
-module.exports = Prelaunch;
+export default new Prelaunch();

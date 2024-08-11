@@ -52,4 +52,4 @@ class SoundManager {
   }
 }
 
-module.exports = new SoundManager();
+export default new SoundManager();

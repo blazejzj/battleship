@@ -21,19 +21,21 @@ class FleetManager {
   };
 
   loadFleet(board) {
-    const player = Game.getState().getPlayer();
-    const map = player.getGrid();
+    const player = Game.getPlayer();
+    const map = player.getGrid(); 
     const boardArray = map.getBoard();
-
+  
+    // Iterate over the board array to place ships on the board
     for (let row = 0; row < boardArray.length; row += 1) {
       for (let col = 0; col < boardArray[0].length; col += 1) {
         if (boardArray[row][col] !== 'x') {
-          const element = boardArray[row][col];
+          const element = boardArray[row][col]; 
           this.loadShipOnBoard(player, { map, board, element, row, col });
-        };
-      };
-    };
-  };
+        }
+      }
+    }
+  }
+  
 
   loadShipOnBoard(player, data) {
     const shipName = data.element.slice(0, -1);
@@ -106,4 +108,4 @@ class FleetManager {
   };
 }
 
-module.exports = FleetManager;
+export default new FleetManager();

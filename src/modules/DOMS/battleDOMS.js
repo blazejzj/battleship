@@ -8,14 +8,16 @@ import Sound from '../utils/sound';
 class battleDOMS {
 
   loadBattleContent() {
-    helper.deleteAppContent();
+    helper.clearContent();
 
     const app = document.getElementById('app');
     app.classList.replace('setup', 'battle');
 
     app.appendChild(this.createBattleWrapper());
     this.displayPlayerShips();
-    Game.getState().getCPU().autoPlace();
+
+    // autoPlace CPU ships
+    Game.getCPU().autoPosition();
 
     this.displayBattleStartMessage('agent');
     this.displayBattleStartMessage('enemy');
@@ -154,32 +156,39 @@ class battleDOMS {
   async handleFieldClick(event) {
     const { target } = event;
     this.disableField(target);
+
     // Player's turn
     const playerTurn = await this.playerPlays(target);
     if (playerTurn === 'win' || playerTurn === 'hit') return;
+
     // CPU's turn
     let cpuTurn = await this.cpuPlays();
     if (cpuTurn === 'win') return;
-    while (cpuTurn === 'hit') cpuTurn = await this.cpuPlays();
-  }
+
+    while (cpuTurn === 'hit') {
+        cpuTurn = await this.cpuPlays();
+        if (cpuTurn === 'win' || cpuTurn === 'miss') break; // Exit loop on miss or win
+    }
+}
+
 
   async playerPlays(fieldNode) {
-    const cpu = Game.getState().getCPU();
+    const cpu = Game.getCPU();
     const index = [...fieldNode.parentNode.children].indexOf(fieldNode);
     const [row, col] = helper.getCoordinatesFromIndex(index);
 
-    const boardElement = cpu.getMap().getBoard()[row][col];
+    const board = cpu.getGrid().getBoard();
+    const boardElement = board[row][col];
     const shipName = this.getShipNameFromBoard(boardElement);
-    const battleship = cpu.getMap().getShip(shipName);
+    const battleship = cpu.getGrid().getShip(shipName);
 
-    console.log(cpu.getMap().getBoard());
     this.unInitBoardFields();
     await this.shotOnTurnPlay('player');
 
     if (boardElement === 'x') {
-      await this.playerMiss(fieldNode);
+        await this.playerMiss(fieldNode);
     } else {
-      return await this.playerHit(fieldNode);
+        return await this.playerHit(fieldNode);
     }
 
     this.displayPlayerMessage(boardElement, battleship);
@@ -189,29 +198,29 @@ class battleDOMS {
     return 'miss';
   }
 
+
   async cpuPlays() {
-    const player = Game.getState().getPlayer();
-    const [row, col] = player.cpuPlay();
+    const player = Game.getPlayer();
+    const [row, col] = player.computerTurn();
 
-    const boardElement = player.getMap().getBoard()[row][col];
+    const board = player.getGrid().getBoard();
+    const boardElement = board[row][col];
     const shipName = this.getShipNameFromBoard(boardElement);
-    const battleship = player.getMap().getShip(shipName);
+    const battleship = player.getGrid().getShip(shipName);
 
-    console.log(row, col);
+    console.log("computer shot at " + row + " " + col);
 
     await this.shotOnTurnPlay('cpu');
 
-    if (boardElement === 'miss') {
-      await this.cpuMiss(row, col);
+    if (boardElement === 'miss' || boardElement === 'x') {
+        await this.cpuMiss(row, col);
+        this.displayEnemyMessage(boardElement, battleship);
+        await this.timeoutOneSecond();
+        await this.turnEnd('cpu');
+        return 'miss'; // Ensure the loop breaks if it's a miss
     } else {
-      return await this.cpuHit(row, col);
+        return await this.cpuHit(row, col);
     }
-
-    this.displayEnemyMessage(boardElement, battleship);
-    await this.timeoutOneSecond();
-    await this.turnEnd('cpu');
-
-    return 'miss';
   }
 
   async shotOnTurnPlay(playerOrCpu) {
@@ -234,23 +243,23 @@ class battleDOMS {
 
   async cpuMiss(row, col) {
     const friendlyBoard = document.getElementById('field-container-friendly');
-    const player = Game.getState().getPlayer();
+    const player = Game.getPlayer(); 
     const index = helper.getIndexFromCoordinates(row, col);
 
     this.addMissStyle(friendlyBoard.children[index]);
-    player.getMap().getBoard()[row][col] = 'miss';
+    player.getGrid().getBoard()[row][col] = 'miss'; 
     await this.timeoutMissileLength();
     Sound.miss();
   }
 
   async playerHit(fieldNode) {
-    const cpu = Game.getState().getCPU();
+    const cpu = Game.getCPU();  
     const index = [...fieldNode.parentNode.children].indexOf(fieldNode);
     const [row, col] = helper.getCoordinatesFromIndex(index);
 
-    const boardElement = cpu.getMap().getBoard()[row][col];
+    const boardElement = cpu.getGrid().getBoard()[row][col]; 
     const shipName = this.getShipNameFromBoard(boardElement);
-    const battleship = cpu.getMap().getShip(shipName);
+    const battleship = cpu.getGrid().getShip(shipName); 
 
     this.addHitStyle(fieldNode);
     this.loadShipIfSunk({ cpu, battleship, row, col });
@@ -259,30 +268,31 @@ class battleDOMS {
     this.displayPlayerMessage(boardElement, battleship);
 
     await this.timeoutOneSecond();
-    if (cpu.isLoser()) return this.showPlayerWinModal();
+    if (cpu.hasLost()) return this.showPlayerWinModal();
     this.initBoardFields();
 
     return 'hit';
-  }
+}
 
-  async cpuHit(row, col) {
-    const friendlyBoard = document.getElementById('field-container-friendly');
-    const player = Game.getState().getPlayer();
-    const index = helper.getIndexFromCoordinates(row, col);
+async cpuHit(row, col) {
+  const friendlyBoard = document.getElementById('field-container-friendly');
+  const player = Game.getPlayer();  
+  const index = helper.getIndexFromCoordinates(row, col);
 
-    const boardElement = player.getMap().getBoard()[row][col];
-    const shipName = this.getShipNameFromBoard(boardElement);
-    const battleship = player.getMap().getShip(shipName);
+  const boardElement = player.getGrid().getBoard()[row][col]; 
+  const shipName = this.getShipNameFromBoard(boardElement);
+  const battleship = player.getGrid().getShip(shipName);  
 
-    this.addHitStyle(friendlyBoard.children[index]);
-    player.getMap().getBoard()[row][col] = 'hit';
-    await this.timeoutMissileLength();
-    Sound.hit();
-    this.displayEnemyMessage(boardElement, battleship);
-    if (player.isLoser()) return this.showEnemyWinModal();
+  this.addHitStyle(friendlyBoard.children[index]);
+  player.getGrid().getBoard()[row][col] = 'hit';  
+  await this.timeoutMissileLength();
+  Sound.hit();
+  this.displayEnemyMessage(boardElement, battleship);
+  if (player.hasLost()) return this.showEnemyWinModal(); 
 
-    return 'hit';
-  }
+  return 'hit';
+}
+
 
   async turnEnd(playerOrCpu) {
     await this.timeoutOneAndHalfSecond();
@@ -301,14 +311,15 @@ class battleDOMS {
 
   displayPlayerShips() {
     const friendlyBoard = document.getElementById('field-container-friendly');
-    const playerMap = Game.getState().getPlayer().getMap();
+    const player = Game.getPlayer();
+    const playerMap = player.getGrid();
     playerMap.setAllShipsNotFound();
     fleet.loadFleet(friendlyBoard);
   }
 
   loadShipIfSunk(data) {
     const board = document.getElementById('field-container-enemy');
-    const map = data.cpu.getMap();
+    const map = data.cpu.getGrid();
     const boardArray = map.getBoard();
 
     map.receiveAttack([data.row, data.col]);
@@ -468,4 +479,4 @@ class battleDOMS {
   }
 }
 
-module.exports = new battleDOMS();
+export default new battleDOMS();

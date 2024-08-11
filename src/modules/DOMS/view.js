@@ -7,7 +7,7 @@ import Game from '../factories/battleManager';
 
 class ViewManager {
   loadContent() {
-    helper.deleteAppContent();
+    helper.clearContent(); 
     pregame.loadCard();
     this.initPlayButton();
   }
@@ -19,20 +19,19 @@ class ViewManager {
 
   loadSetup() {
     this.setPlayerName();
-    helper.deleteAppContent();
+    helper.clearContent(); 
     setup.loadSetupContent();
     DragDrop.initDraggableFields();
-    Sound.unMuteIOS();
   }
 
-  setPlayerName() {
+    setPlayerName() {
     const name = document.getElementById('name-input').value.toString().trim();
     if (name) {
-      Game.getState().getPlayer().setName(`Captain ${name}`);
+        Game.getPlayer().setAlias(`Captain ${name}`); 
     }
     console.log(name);
-  }
+    }
+
 }
 
-
-module.exports = new ViewManager();
+export default new ViewManager();

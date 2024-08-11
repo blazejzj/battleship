@@ -96,15 +96,15 @@ class MessageManager {
   }
 
   getWelcomeMessage() {
-    const playerName = Game.getState().getPlayer().getName();
+    const playerName = Game.getPlayer().getAlias(); 
     this.messages.welcome[0] += ` ${playerName}!`;
     return this.messages.welcome;
   }
-
+  
   getBattleStartMessage() {
-    const playerName = Game.getState().getPlayer().getName();
+    const playerName = Game.getPlayer().getAlias();  
     return [`${playerName}, ${this.messages.battleStartPlayer[0]}`];
-  }
+  }  
 
   getNewEnemyBattleStartMessage() {
     return this.messages.battleStartEnemy;
@@ -159,4 +159,4 @@ class MessageManager {
   }
 }
 
-module.exports = new MessageManager();
+export default new MessageManager();

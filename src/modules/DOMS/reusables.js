@@ -105,4 +105,4 @@ class ComponentManager {
   }
 }
 
-export default ComponentManager;
+export default new ComponentManager();

@@ -31,4 +31,4 @@ class battleManager {
   }
 }
 
-module.exports = battleManager;
+export default new battleManager();

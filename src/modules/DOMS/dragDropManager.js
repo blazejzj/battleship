@@ -24,6 +24,8 @@ class DragDropManager {
     this.fieldQueue = [];
   }
 
+  // LISTENERS
+
   dragStart() {
     const fleetContainer = document.getElementById('fleet-setup');
 
@@ -103,9 +105,11 @@ class DragDropManager {
     });
   }
 
+  // HANDLERS
+
   dragStartHandler(event, node) {
     this.addShipOnDragStart(node);
-    event.stopPropagation(); 
+    event.stopPropagation();
   }
 
   dragEnterHandler(event) {
@@ -137,17 +141,17 @@ class DragDropManager {
   }
 
   dropIfValid(x, y) {
-    const map = Game.getState().getPlayer().getMap();
+    const map = Game.getPlayer().getGrid();
     const shipOnDrag = map.getShipOnDrag();
 
     if (map.getAxis() === 'X') {
       return [
-        map.placeX(ship(shipOnDrag.name, shipOnDrag.length), [x, y]), // [x, y] is the starting point
+        map.placeX(new ship(shipOnDrag.name, shipOnDrag.length), [x, y]),
         shipOnDrag.name,
       ];
     }
     return [
-      map.placeY(ship(shipOnDrag.name, shipOnDrag.length), [x, y]), // [x, y] is the starting point
+      map.placeY(new ship(shipOnDrag.name, shipOnDrag.length), [x, y]),
       shipOnDrag.name,
     ];
   }
@@ -167,7 +171,7 @@ class DragDropManager {
     app.appendChild(node);
     this.addShipOnDragStart(node);
 
-    const shipOnDrag = Game.getState().getPlayer().getMap().getShipOnDrag();
+    const shipOnDrag = Game.getPlayer().getGrid().getShipOnDrag();
     const touchLocation = event.targetTouches[0];
     const touchX = event.touches[0].clientX;
     const touchY = event.touches[0].clientY;
@@ -181,22 +185,22 @@ class DragDropManager {
     }
 
     hoveredElement[0] = newHoveredElement;
-    if (hoveredElement[0].classList.contains('field')) {
+    if (hoveredElement[0] && hoveredElement[0].classList.contains('field')) {
       this.styleFieldsForDrop(fieldContainer, this.getNodeIndex(hoveredElement[0]));
     }
   }
 
   touchEndHandler(event, node) {
-    if (!this.touchMove) return; 
+    if (!this.touchMove) return;
 
     const touchX = event.changedTouches[0].clientX;
     const touchY = event.changedTouches[0].clientY;
-    const data = node.dataset.shipName; 
+    const data = node.dataset.shipName;
     const fieldContainer = document.getElementById('field-container-setup');
     const hoveredElement = document.elementFromPoint(touchX, touchY);
     const copy = document.querySelector(`[data-ship-name="${data}"]`);
 
-    if (hoveredElement.classList.contains('field')) {
+    if (hoveredElement && hoveredElement.classList.contains('field')) {
       const index = this.getNodeIndex(hoveredElement);
       const [x, y] = helper.getCoordinatesFromIndex(index);
       const [isPlaced, shipOnDrag] = this.dropIfValid(x, y);
@@ -260,16 +264,26 @@ class DragDropManager {
   }
 
   addShipOnDragStart(node) {
-    Game.getState().getPlayer().getMap().setShipOnDrag({
-      name: node.dataset.shipName,
-      length: node.dataset.shipLength,
+    const shipName = node.dataset.shipName;
+    const shipLength = parseInt(node.dataset.shipLength, 10);
+
+    if (isNaN(shipLength)) {
+      console.error('Invalid ship length:', shipLength);
+      return;
+    }
+
+    Game.getPlayer().getGrid().setShipOnDrag({
+      name: shipName,
+      length: shipLength,
     });
   }
 
   resetFieldStyling() {
     const fieldContainer = document.getElementById('field-container-setup');
     this.fieldQueue.forEach((index) => {
-      fieldContainer.children[index].className = 'field';
+      if (fieldContainer.children[index]) {
+        fieldContainer.children[index].className = 'field';
+      }
     });
     this.emptyFieldQueue();
   }
@@ -278,55 +292,62 @@ class DragDropManager {
     if (!isPlaced) return;
 
     const battleship = document.querySelector(`[data-ship-name=${shipOnDrag}]`);
-    battleship.classList.add('hidden');
+    if (battleship) {
+      battleship.classList.add('hidden');
+    }
 
     this.enableContinueButtonIfAllPlaced();
   }
 
   styleFieldsForDrop(parentNode, index) {
-    const map = Game.getState().getPlayer().getMap();
+    const player = Game.getPlayer();
+    const map = player.getGrid();
     const board = map.getBoard();
     const axis = map.getAxis();
     const shipOnDrag = map.getShipOnDrag();
     let { length } = shipOnDrag;
     this.emptyFieldQueue();
 
+    console.log("player:", player);
+    console.log("map:", map);
+    console.log("board:", board);
+    console.log("axis:", axis);
+    console.log("shipOnDrag:", shipOnDrag);
+    console.log("index:", index);
+
     let isTaken = false;
-
     if (axis === 'X') {
-      for (
-        let i = index;
-        i < helper.roundNearestTenExceptZero(index + 1);
-        i += 1
-      ) {
-        const [x, y] = helper.getCoordinatesFromIndex(i);
-        if (length === 0) break; 
-        parentNode.children[i].classList.add('hovering');
-        this.fieldQueue.push(i);
-        length -= 1;
-        if (board[x][y] !== 'x') {
-          isTaken = true;
+        for (let i = index; i < helper.roundNearestTenExceptZero(index + 1); i += 1) {
+            const [x, y] = helper.getCoordinatesFromIndex(i);
+            console.log(`X axis - i: ${i}, x: ${x}, y: ${y}`);
+            if (length === 0) break;
+            parentNode.children[i].classList.add('hovering');
+            this.fieldQueue.push(i);
+            length -= 1;
+            if (board[x][y] !== 'x') {
+                isTaken = true;
+            }
         }
-      }
     }
-
     if (axis === 'Y') {
-      for (let i = index; i < 100; i += 10) {
-        const [x, y] = helper.getCoordinatesFromIndex(i);
-        if (length === 0) break; 
-        parentNode.children[i].classList.add('hovering');
-        this.fieldQueue.push(i);
-        length -= 1;
-        if (board[x][y] !== 'x') {
-          isTaken = true;
+        for (let i = index; i < 100; i += 10) {
+            const [x, y] = helper.getCoordinatesFromIndex(i);
+            console.log(`Y axis - i: ${i}, x: ${x}, y: ${y}`);
+            if (length === 0) break;
+            parentNode.children[i].classList.add('hovering');
+            this.fieldQueue.push(i);
+            length -= 1;
+            if (board[x][y] !== 'x') {
+                isTaken = true;
+            }
         }
-      }
     }
 
-    if (isTaken || length !== 0)
-      this.fieldQueue.forEach((field) => {
-        parentNode.children[field].classList.add('red');
-      });
+    if (isTaken || length !== 0) {
+        this.fieldQueue.forEach((field) => {
+            parentNode.children[field].classList.add('red');
+        });
+    }
   }
 
   enableContinueButtonIfAllPlaced() {
@@ -344,4 +365,4 @@ class DragDropManager {
   }
 }
 
-module.exports = new DragDropManager();
+export default new DragDropManager();

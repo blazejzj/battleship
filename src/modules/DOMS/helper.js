@@ -1,7 +1,7 @@
 class Helper {
 
     constructor() {
-        this.BOARD_SIZE = Helper.BOARD_SIZE;
+        this.BOARD_SIZE = 10;
     }
 
     clearContent() {
@@ -68,9 +68,13 @@ class Helper {
       const board = document.createElement('div');
       board.id = `field-container-${description}`;
       board.className = `field-container`;
-  
-      for (let i = 0; i < Helper.BOARD_SIZE; i += 1) {
-        for (let j = 0; j < Helper.BOARD_SIZE; j += 1) {
+
+      const boardSize = this.BOARD_SIZE;
+
+      for (let i = 0; i < boardSize; i += 1) {
+        console.log("ROW NR: ", i);
+        for (let j = 0; j < boardSize; j += 1) {
+          console.log("FIELD NR: ", i * boardSize + j);
           const field = document.createElement('div');
           field.className = 'field';
           board.appendChild(field);
@@ -95,14 +99,14 @@ class Helper {
     };
   
     getCoordinatesFromIndex(index) {
-      const x = parseInt(index / Helper.BOARD_SIZE, 10);
-      const y = index % Helper.BOARD_SIZE;
+      const x = parseInt(index / this.BOARD_SIZE, 10);
+      const y = index % this.BOARD_SIZE;
   
       return [x, y];
     };
   
     getIndexFromCoordinates(x, y) {
-      return x * Helper.BOARD_SIZE + y;
+      return x * this.BOARD_SIZE + y;
     };
   
     roundNearestTenExceptZero(num) {
@@ -117,4 +121,4 @@ class Helper {
     };
   };
   
-module.exports = Helper;
+export default new Helper();

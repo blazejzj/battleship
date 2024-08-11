@@ -49,6 +49,10 @@ class Ship {
   toggleFound() {
     this.isFound = !this.isFound; 
   }
+
+  resetFound() {
+    this.isFound = false;
+  }
 }
 
-module.exports = Ship;
+export default Ship;

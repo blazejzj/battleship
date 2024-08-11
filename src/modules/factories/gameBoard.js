@@ -167,4 +167,4 @@ class gameBoard {
   }
 }
 
-module.exports = gameBoard;
+export default gameBoard;
