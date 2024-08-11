@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "githubPages": "git subtree push --prefix dist origin gh-pages"
   },
   "author": "",
   "license": "ISC",
