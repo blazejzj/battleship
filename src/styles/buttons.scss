@@ -1,0 +1,72 @@
+button {
+    outline: none;
+  }
+  
+  button:focus,
+  .ship-card:focus {
+    outline: 0.125rem solid $blue-light-color;
+    outline-offset: 0.125rem;
+  }
+  
+  // SHOW OUTLINE ON TABS ONLY
+  button:focus:not(:focus-visible),
+  .ship-card:focus:not(:focus-visible) {
+    outline: none;
+  }
+  
+  .enemy-win + .new-game-button:focus {
+    outline-color: $orange-light-color;
+  }
+  
+  .axis-button-container {
+    @include flexRowCenter;
+    grid-column: 1/3;
+    gap: min(10%, 2rem);
+  }
+  
+  .axis-button,
+  .reset-button,
+  .continue-button,
+  .new-game-button {
+    @include appearanceNone;
+    min-width: 0;
+    margin: 0;
+    padding: 0.75em 3em;
+    border: 0.0625rem solid $main-color;
+    border-radius: $main-border-radius;
+    font-family: inherit;
+    font-size: $font-size-normal-responsive;
+    text-align: center;
+    color: $main-color;
+    background-color: transparent;
+    transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+    cursor: pointer;
+  }
+  
+  .continue-button.disabled {
+    border-color: $transparent-low-grey-color;
+    color: $transparent-low-grey-color;
+    pointer-events: all;
+    cursor: not-allowed;
+    &:active {
+      pointer-events: none;
+      background-color: $red-light-color-transparent;
+    }
+  }
+  
+  .axis-button:hover,
+  .reset-button:hover,
+  .continue-button.enabled:hover,
+  .new-game-button:hover {
+    box-shadow: $button-box-shadow;
+    transform: translateY(-0.125rem);
+  }
+  
+  .axis-button:active,
+  .reset-button:active,
+  .continue-button.active:active,
+  .new-game-button:active,
+  .axis-button.selected {
+    color: $main-opposite-color;
+    background-color: $main-color;
+  }

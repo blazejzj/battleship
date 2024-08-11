@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+.pregame-card {
+  @include mainBackground;
+  @include flexColumnSpaceEvenly;
+  width: 100%;
+  max-width: 28.125rem;
+  padding: $pregame-card-padding;
+  border: 0.125rem solid transparent;
+  border-radius: 1rem;
+  box-shadow: 0 0 30px 0.0625rem $transparent-shadow-color;
+  text-align: center;
+  transition: border-color 0.5s;
+  aspect-ratio: 10/8;
+  &:hover {
+    border: 0.125rem solid $main-opposite-color;
+  }
+  h1 {
+    position: relative;
+    line-height: 1;
+    font-family: 'Anton', sans-serif;
+    font-size: 5rem;
+    letter-spacing: 0.1rem;
+    color: transparent;
+    &::before {
+      @include pseudoOverlay;
+      @include fullSize;
+      top: 0;
+      left: 0;
+      background: url('../assets/images/title.svg') no-repeat center;
+      background-size: contain;
+      pointer-events: none;
+    }
+  }
+  .name-form {
+    position: relative;
+    top: 5%;
+  }
+}
+
+@media screen and (max-width: 30rem) {
+  .pregame-card {
+    h1 {
+      font-size: 3rem;
+    }
+  }
+}

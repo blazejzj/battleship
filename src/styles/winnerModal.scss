@@ -1,0 +1,92 @@
+.win-modal-container {
+    @include flexColumnCenter;
+    @include blurBackground;
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    align-items: center;
+    width: min(30rem, 80%);
+    aspect-ratio: 1/1;
+    gap: 1rem;
+    padding: 2rem;
+    transform: translate(-50%, -50%);
+    .title-agent-win,
+    .title-enemy-win {
+      font-size: 2rem;
+      font-style: italic;
+      font-weight: 400;
+      text-align: center;
+    }
+    .title-agent-win {
+      color: $blue-light-color;
+    }
+    .title-enemy-win {
+      color: $orange-light-color;
+    }
+  
+    .message.battle.enemy-win,
+    .message.battle.agent-win {
+      max-width: 18.75rem;
+    }
+  
+    .message.battle.enemy-win,
+    .message.battle.agent-win {
+      img {
+        height: 3rem;
+        margin-bottom: 1rem;
+      }
+      .typed-cursor {
+        @include typedCursor;
+      }
+    }
+  
+    .message.battle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .message-container {
+        text-align: center;
+        .message-agent-win,
+        .message-enemy-win {
+          display: inline;
+          width: 100%;
+          font-size: $font-size-normal-large-responsive;
+          color: $orange-light-color;
+        }
+        .message-agent-win {
+          color: $blue-light-color;
+        }
+        .message-agent-win + .typed-cursor {
+          @include agentColor;
+        }
+        .message-enemy-win {
+          color: $orange-light-color;
+        }
+        .message-enemy-win + .typed-cursor {
+          @include enemyColor;
+        }
+      }
+    }
+    border-radius: 2rem !important;
+    transform-origin: top left;
+    -webkit-animation: pop 0.5s 1 forwards;
+    animation: pop 0.5s 1 forwards;
+  }
+  
+  .win-modal-container.enemy {
+    box-shadow: $orange-light-color 0 0 2rem;
+  }
+  
+  .win-modal-container.player {
+    box-shadow: $blue-light-color 0 0 2rem;
+  }
+  
+  .win-overlay {
+    @include fullSize;
+    @include mainBackground;
+    position: absolute;
+    z-index: 5;
+    -webkit-animation: opacityShow 0.5s 1 forwards;
+    animation: opacityShow 0.5s 1 forwards;
+  }

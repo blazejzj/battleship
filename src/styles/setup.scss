@@ -1,0 +1,81 @@
+@import './variables.scss';
+
+.setup-wrapper {
+  width: 100%;
+  & > * {
+    border-radius: $main-border-radius;
+  }
+}
+
+.message.setup,
+.reset-continue-section {
+  @include mainBackground;
+}
+
+.message.setup {
+  @include flexRowStartCenter;
+  gap: 0.5rem;
+  max-width: $setup-max-width;
+  margin: 0 auto 0.5rem auto;
+  padding: 1rem;
+  font-size: $font-size-normal-responsive;
+  .message-image {
+    height: $image-height;
+  }
+  .message-container {
+    display: inline;
+    text-align: start;
+    .message-agent {
+      display: inline;
+      color: $blue-light-color;
+    }
+    .typed-cursor {
+      position: relative;
+      left: 0.0625rem;
+      bottom: -0.1875rem;
+      display: inline-block;
+      width: 0.5rem;
+      height: 1rem;
+      color: transparent;
+      background-color: $blue-light-color;
+      overflow: hidden;
+      -webkit-animation-duration: 1.5s;
+      animation-duration: 1.5s;
+    }
+  }
+}
+
+.setup-container {
+  @include mainBackground;
+  max-width: $setup-max-width;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.board-fleet-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.reset-continue-section {
+  @include flexRowCenter;
+  gap: min(10%, 2rem);
+  max-width: $setup-max-width;
+  margin: 0.5rem auto 0 auto;
+  padding: 1rem;
+}
+
+@media screen and (max-width: 30rem) {
+  .app.setup {
+    .setup-container {
+      .board-fleet-container {
+        display: flex;
+        flex-direction: column;
+        .fleet-setup {
+          flex-direction: row;
+        }
+      }
+    }
+  }
+}

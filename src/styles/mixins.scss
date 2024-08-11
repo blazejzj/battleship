@@ -1,0 +1,131 @@
+@mixin fullHeightFIllAvailable {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+  
+  @mixin flexRowCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  @mixin flexRowBottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+  
+  @mixin flexRowStartCenter {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  @mixin flexRowSpaceAround {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  @mixin flexColumnCenter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  @mixin flexColumnSpaceAround {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  
+  @mixin flexColumnSpaceEvenly {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  @mixin gridPlaceItemsCenter {
+    display: grid;
+    place-items: center;
+  }
+  
+  @mixin pseudoOverlay {
+    content: '';
+    position: absolute;
+    z-index: 1;
+  }
+  
+  @mixin pseudoOverlayPlus {
+    content: '';
+    position: absolute;
+    z-index: 2;
+  }
+  
+  @mixin pseudoOverlayPlusPlus {
+    content: '';
+    position: absolute;
+    z-index: 3;
+  }
+  
+  @mixin pseudoUnderlay {
+    content: '';
+    position: absolute;
+    z-index: -1;
+  }
+  
+  @mixin fullSize {
+    height: 100%;
+    width: 100%;
+  }
+  
+  @mixin typedCursor {
+    position: relative;
+    left: 1px;
+    bottom: -3px;
+    display: inline-block;
+    width: 0.5rem;
+    height: 1rem;
+    color: transparent;
+    overflow: hidden;
+    -webkit-animation-duration: 1.5s;
+    animation-duration: 1.5s;
+  }
+  
+  @mixin agentColor {
+    font-size: $font-size-normal-responsive;
+    background-color: $blue-light-color;
+  }
+  
+  @mixin enemyColor {
+    font-size: $font-size-normal-responsive;
+    background-color: $orange-light-color;
+  }
+  
+  @mixin mainBackground {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+  
+  @mixin blurBackground {
+    background-color: rgba(0, 0, 0, 0.75);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  
+  @mixin appearanceNone {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: inline-block;
+  }
+  
+  @mixin fullSizeMask {
+    mask-size: 100%;
+    -webkit-mask-size: 100%;
+  }
+  
+  @mixin noUserSelect {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
