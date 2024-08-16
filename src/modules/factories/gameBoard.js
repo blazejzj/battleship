@@ -8,7 +8,8 @@ class gameBoard {
     this.axis = 'X';
   }
 
-  // getters
+  // Getters
+
   getBoard() {
     return this.board;
   }
@@ -29,7 +30,8 @@ class gameBoard {
     return this.fleet.find(ship => ship.getName() === shipName);
   }
 
-  // setters
+  // Setters
+
   setAxisX() {
     this.axis = 'X';
   }
@@ -47,7 +49,8 @@ class gameBoard {
     this.fleet.forEach(ship => ship.resetFound());
   }
 
-  // methods
+  // Methods
+
   addToFleet(ship) {
     let newShip;
     switch (ship.getName()) {
@@ -67,58 +70,65 @@ class gameBoard {
         newShip = new Ship('destroyer', 2);
     }
     this.fleet.push(newShip);
-  }
-
+  };
 
   setFleetEmpty() {
     this.fleet = [];
-  }
+  };
 
   placeX(ship, start) {
-    let shipLength = ship.getLength();
+    const shipLength = ship.getLength();
     const [x, y] = start;
     const shipPlacement = [];
-
-    if (this.isOutOfBounds(shipLength, this.board.length, y)) return false;
-
-    for (let j = y; j < this.board.length; j++) {
-      if (this.board[x][j] !== 'x') return false;
-
-      shipPlacement.push([x, j]);
-      shipLength -= 1;
-      if (shipLength === 0) break;
+  
+    if (this.isOutOfBounds(shipLength, this.board.length, y)) {
+      return false;
     }
-
+  
+    // check if ship can be placed
+    for (let j = 0; j < shipLength; j++) {
+      const currentY = y + j;
+      if (currentY >= this.board.length || this.board[x][currentY] !== 'x') {
+        return false;
+      }
+      shipPlacement.push([x, currentY]);
+    }
+  
+    // place ship on board
     shipPlacement.forEach(([i, j]) => {
       this.board[i][j] = `${ship.getName()}X`;
     });
-
+  
     this.addToFleet(ship);
-
+  
     return true;
   }
 
   placeY(ship, start) {
-    let shipLength = ship.getLength();
+    const shipLength = ship.getLength();
     const [x, y] = start;
     const shipPlacement = [];
-
-    if (this.isOutOfBounds(shipLength, this.board.length, x)) return false;
-
-    for (let i = x; i < this.board.length; i++) {
-      if (this.board[i][y] !== 'x') return false;
-
-      shipPlacement.push([i, y]);
-      shipLength -= 1;
-      if (shipLength === 0) break;
+  
+    if (this.isOutOfBounds(shipLength, this.board.length, x)) {
+      return false;
     }
-
+  
+    // check if ship can be placed
+    for (let i = 0; i < shipLength; i++) {
+      const currentX = x + i;
+      if (currentX >= this.board.length || this.board[currentX][y] !== 'x') {
+        return false;
+      }
+      shipPlacement.push([currentX, y]);
+    }
+  
+    // place ship on board
     shipPlacement.forEach(([i, j]) => {
       this.board[i][j] = `${ship.getName()}Y`;
     });
-
+  
     this.addToFleet(ship);
-
+  
     return true;
   }
 
@@ -159,11 +169,11 @@ class gameBoard {
   }
 
   areAllShipsFound() {
-    return this.fleet.length === 5;
+    return this.fleet.length === 5; // 5 ships total in the fleet at start
   }
 
   isEveryShipSunk() {
-    return this.fleet.every(ship => ship.getSunk());
+    return this.fleet.every(ship => ship.getSunk()); 
   }
 }
 

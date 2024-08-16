@@ -7,7 +7,8 @@ class Ship {
     this.isFound = false;
   }
 
-  // getters
+  // Getters
+
   getName() {
     return this.name;
   }
@@ -28,12 +29,29 @@ class Ship {
     return this.hits;
   }
 
+  // Setters
 
-  // methods
-
-  found() {
-    this.isFound = true;
+  setName(newName) {
+    this.name = newName;
   }
+
+  setFound(newFound) {
+    this.isFound = newFound;
+  }
+
+  setSunk(newSunk) {
+    this.isSunk = newSunk;
+  }
+
+  setLength(newLength) {
+    this.length = newLength;
+  }
+
+  setHits(newHits) {
+    this.hits = newHits;
+  }
+
+  // Methods
 
   hit() {
     this.hits += 1;
@@ -52,6 +70,10 @@ class Ship {
 
   resetFound() {
     this.isFound = false;
+  }
+
+  found() {
+    this.isFound = true;
   }
 }
 

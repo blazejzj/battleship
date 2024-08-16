@@ -4,13 +4,14 @@ import Ship from './ship'
 class Player {
   constructor(playerAlias, playerType) {
     this.alias = playerAlias;
-    this.type = playerType; // human or ai
-    this.grid = new Gameboard();
+    this.type = playerType; // Playertype -> human or computer
+    this.grid = new Gameboard(); // initialize a new gameboard
     this.attackQueue = [];
     this.moves = 0;
   }
 
-  // getters
+  // Getters
+
   getAlias() {
     return this.alias;
   }
@@ -23,12 +24,13 @@ class Player {
     return this.type;
   }
 
-  // setters
+  // Setters
+
   setAlias(newAlias) {
     this.alias = newAlias;
   }
 
-  // methods
+  // Methods
   isFieldEmpty(coordinate) {
     const [x, y] = coordinate;
     // checks if a specific field on the board has already been hit or missed
@@ -43,30 +45,31 @@ class Player {
   }
 
   autoPosition() {
-    const ships = ['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'];
-    const lengths = [5, 4, 3, 3, 2]; // corresponding lengths of the ships
+    const ships = [
+      { name: 'carrier', length: 5 },
+      { name: 'battleship', length: 4 },
+      { name: 'cruiser', length: 3 },
+      { name: 'submarine', length: 3 },
+      { name: 'destroyer', length: 2 }
+    ];
   
-    while (ships.length) {
-      const direction = this.randomDirection();
-      const row = this.randomCoordinate();
-      const col = this.randomCoordinate();
+    ships.forEach(ship => {
       let placed = false;
-
-      const currentShip = new Ship(ships[0], lengths[0]);
   
-      // try to place the ship on the board based on the chosen direction
-      if (direction === 'x') {
-        placed = this.getGrid().placeX(currentShip, [row, col]);
-      } else {
-        placed = this.getGrid().placeY(currentShip, [row, col]);
-      }
+      while (!placed) {
+        const direction = this.randomDirection();
+        const row = this.randomCoordinate();
+        const col = this.randomCoordinate();
+        const currentShip = new Ship(ship.name, ship.length);
   
-      if (placed) {
-        ships.shift();
-        lengths.shift();
+        if (direction === 'x') {
+          placed = this.getGrid().placeX(currentShip, [row, col]);
+        } else {
+          placed = this.getGrid().placeY(currentShip, [row, col]);
+        }
       }
-    }
-  }
+    });
+  };
 
   computerTurn() {
     let invalidMove = true;
@@ -93,7 +96,6 @@ class Player {
     }
 
     this.populateQueue(x, y)
-    console.log(this.attackQueue);
     this.moves++;
     return [x, y];
   }
@@ -101,51 +103,49 @@ class Player {
   populateQueue(row, col) {
     if (this.attackQueue.length === 1) {
       this.attackQueue = [];
-    };
+    }
 
     if (this.getGrid().getBoard()[row][col] === 'miss') {
-        return
-    };
+      return;
+    }
 
     let initial = false;
 
     if (this.attackQueue.length === 0) {
       this.attackQueue.push([row, col]);
       initial = true;
-    };
+    }
 
-    // add adjacent fields to the queue
-    if (row > 0 && row <= 9) {
-      this.attackQueue.push([row - 1, col]); // add field above
-    };
+    // Add adjacent fields to the queue
+    const adjacentFields = [
+      [row - 1, col], // above
+      [row + 1, col], // below
+      [row, col - 1], // left
+      [row, col + 1]  // right
+    ];
 
-    if (row >= 0 && row < 9) {
-      this.attackQueue.push([row + 1, col]); // add field below
-    };
+    adjacentFields.forEach(([r, c]) => {
+      if (r >= 0 && r <= 9 && c >= 0 && c <= 9) {
+        this.attackQueue.push([r, c]);
+      }
+    });
 
-    if (col > 0 && col <= 9) {
-      this.attackQueue.push([row, col - 1]); // add field to the left
-    };
-
-    if (col >= 0 && col < 9) {
-      this.attackQueue.push([row, col + 1]); // add field to the right
-    };
-
-    // filter the queue to keep only the fields that are in the same row or column as the first hit
+    // Filter the queue to keep only the fields that are in the same row or column as the first hit
     if (this.attackQueue.length > 1 && !initial) {
-      if (row === this.attackQueue[0][0]) {
+      const [firstRow, firstCol] = this.attackQueue[0];
+      if (row === firstRow) {
         this.attackQueue = [
-          ...this.attackQueue.slice(0, 1),
-          ...this.attackQueue.slice(1).filter((subArr) => subArr[0] === row),
-        ]
-      } else if (col === this.attackQueue[0][1]) {
-        this.attackQueue = [
-          ...this.attackQueue.slice(0, 1),
-          ...this.attackQueue.slice(1).filter((subArr) => subArr[1] === col),
+          this.attackQueue[0],
+          ...this.attackQueue.slice(1).filter(([r]) => r === row)
         ];
-      };
-    };
-  };
+      } else if (col === firstCol) {
+        this.attackQueue = [
+          this.attackQueue[0],
+          ...this.attackQueue.slice(1).filter(([, c]) => c === col)
+        ];
+      }
+    }
+  }
 
   playTurn(coordinate) {
     const [x, y] = coordinate;
