@@ -17,27 +17,32 @@ class battleDOMS {
     const app = document.getElementById('app');
     app.classList.replace('setup', 'battle');
 
-    app.appendChild(this.createBattleWrapper());
-    this.displayPlayerShips();
+    const battleWrapper = this.createBattleWrapper();
+    app.appendChild(battleWrapper);
 
-    // autoPlace CPU ships
+    this.displayPlayerShips();
     Game.getCPU().autoPosition();
 
-    this.displayBattleStartMessage('agent');
-    this.displayBattleStartMessage('enemy');
+    ['agent', 'enemy'].forEach(role => this.displayBattleStartMessage(role));
 
     this.initBoardFields();
-    this.styleOnTurn(document.querySelector('.message.battle.agent'));
+    const agentMessage = document.querySelector('.message.battle.agent');
+    this.styleOnTurn(agentMessage);
   }
 
   createBattleWrapper() {
     const wrapper = helper.create('div', { className: 'battle-wrapper' });
 
+    const playerMap = this.createPlayerMap();
+    const computerMap = this.createComputerMap();
+    const agentMessageSection = Component.createMessageSection(['battle', 'agent']);
+    const enemyMessageSection = Component.createMessageSection(['battle', 'enemy']);
+
     helper.appendAll(wrapper, [
-      this.createPlayerMap(),
-      this.createComputerMap(),
-      Component.createMessageSection(['battle', 'agent']),
-      Component.createMessageSection(['battle', 'enemy']),
+      playerMap,
+      computerMap,
+      agentMessageSection,
+      enemyMessageSection,
     ]);
 
     return wrapper;
@@ -68,28 +73,28 @@ class battleDOMS {
   }
 
   createWinnerModal(data) {
-    const winModal = helper.create('section', {
+    const modalContainer = helper.create('section', {
       id: 'win-modal-container',
       className: 'win-modal-container',
     });
 
-    winModal.classList.add(data.className);
+    modalContainer.classList.add(data.className);
 
-    const title = helper.create('h4', {
+    const modalTitle = helper.create('h4', {
       id: `title-${data.id}`,
       className: `title-${data.id}`,
       textContent: data.title,
     });
-    const message = Component.createMessageSection(['battle', data.id]);
+    const modalMessage = Component.createMessageSection(['battle', data.id]);
 
-    const button = helper.create('button', {
+    const newGameButton = helper.create('button', {
       id: 'new-game-button',
       className: 'new-game-button',
       textContent: 'New Battle',
     });
 
-    helper.appendAll(winModal, [title, message, button]);
-    return winModal;
+    helper.appendAll(modalContainer, [modalTitle, modalMessage, newGameButton]);
+    return modalContainer;
   }
 
   createWinOverlay() {
@@ -97,43 +102,43 @@ class battleDOMS {
   }
 
   showPlayerWinModal() {
-    const app = document.getElementById('app');
+      const appElement = document.getElementById('app');
 
-    helper.appendAll(app, [
-      this.createWinnerModal({
-        title: 'YOU WIN!',
-        id: 'agent-win',
-        className: 'player',
-      }),
-      this.createWinOverlay(),
-    ]);
+      const winnerModal = this.createWinnerModal({
+          title: 'YOU WIN!',
+          id: 'agent-win',
+          className: 'player',
+      });
 
-    this.displayWinMessage('agent-win');
-    this.initNewGameButton();
-    this.unInitBoardFields();
+      const winOverlay = this.createWinOverlay();
 
-    return 'win';
+      helper.appendAll(appElement, [winnerModal, winOverlay]);
+
+      this.displayWinMessage('agent-win');
+      this.initNewGameButton();
+      this.unInitBoardFields();
+
+      return 'win';
   }
 
   showEnemyWinModal() {
-    const app = document.getElementById('app');
+    const appElement = document.getElementById('app');
 
-    helper.appendAll(app, [
-      this.createWinnerModal({
+    const winnerModal = this.createWinnerModal({
         title: 'YOU LOSE!',
         id: 'enemy-win',
         className: 'enemy',
-      }),
-      this.createWinOverlay(),
-    ]);
+    });
+
+    const winOverlay = this.createWinOverlay();
+
+    helper.appendAll(appElement, [winnerModal, winOverlay]);
 
     this.displayWinMessage('enemy-win');
     this.initNewGameButton();
 
     return 'win';
-  }
-
-  // LISTENERS
+  } 
 
   initNewGameButton() {
     const button = document.getElementById('new-game-button');
@@ -141,70 +146,64 @@ class battleDOMS {
   }
 
   initBoardFields() {
-    const enemyMap = document.getElementById('board-enemy');
-    const enemyBoard = enemyMap.querySelector('.field-container');
-    enemyBoard.childNodes.forEach((field) => {
-      field.addEventListener('click', (event) => this.handleFieldClick(event));
+    const enemyMapElement = document.getElementById('board-enemy');
+    const enemyFieldContainer = enemyMapElement.querySelector('.field-container');
+    
+    enemyFieldContainer.childNodes.forEach((field) => {
+        field.addEventListener('click', (event) => this.handleFieldClick(event));
     });
+    
     this.addFieldHoverWhenOnTurn();
   }
 
   unInitBoardFields() {
-    const fields = document.querySelectorAll('.field');
-    fields.forEach((field) => field.removeEventListener('click', this.handleFieldClick));
+    const fieldElements = document.querySelectorAll('.field');
+    fieldElements.forEach((field) => field.removeEventListener('click', this.handleFieldClick));
     this.removeFieldHoverWhenOffTurn();
   }
 
-  // HANDLERS
-
   async handleFieldClick(event) {
-    // Prevent any action if it's not player's turn
-    if (!this.isPlayerTurn) return;
 
-    console.log('Player turn starts');
-    this.isPlayerTurn = false;  // Player turn is now being processed
-
-    const { target } = event;
-    this.disableField(target);
-
-    // Player's turn
-    const playerTurn = await this.playerPlays(target);
-    if (playerTurn === 'win' || playerTurn === 'hit') {
-        console.log('Player action ends with hit or win');
-        this.isPlayerTurn = true;  // Player's turn ends, ready for next round
+      if (!this.isPlayerTurn) {
         return;
-    }
+      }
 
-    console.log('Ending player turn');
+      this.isPlayerTurn = false;
 
-    // CPU's turn
-    let cpuTurn = await this.cpuPlays();
-    if (cpuTurn === 'win') {
-        console.log('CPU turn ends with win');
-        this.isPlayerTurn = true;  // Player's turn can start again
-        return;
-    }
+      const clickedField = event.target;
+      this.disableField(clickedField);
 
-    while (cpuTurn === 'hit') {
-        console.log('CPU hits again');
-        cpuTurn = await this.cpuPlays();
-    }
+      // Player turn
+      const playerTurnResult = await this.playerPlays(clickedField);
+      if (playerTurnResult === 'win' || playerTurnResult === 'hit') {
+          this.isPlayerTurn = true;
+          return;
+      }
 
-    console.log('CPU turn ends');
-    this.isPlayerTurn = true;  // Player's turn can start again
-    console.log('Player turn ends');
-  } 
+      // CPU turn
+      let cpuTurnResult = await this.cpuPlays();
+      if (cpuTurnResult === 'win') {
+          this.isPlayerTurn = true;
+          return;
+      }
+
+      while (cpuTurnResult === 'hit') {
+          cpuTurnResult = await this.cpuPlays();
+      }
+
+      // Player's turn can start again
+      this.isPlayerTurn = true;
+  }
 
 
 
   async playerPlays(fieldNode) {
-    console.log('Player action begins');
     const cpu = Game.getCPU();
-    const index = [...fieldNode.parentNode.children].indexOf(fieldNode);
-    const [row, col] = helper.getCoordinatesFromIndex(index);
+    const fieldIndex = [...fieldNode.parentNode.children].indexOf(fieldNode);
+    const [row, col] = helper.getCoordinatesFromIndex(fieldIndex);
 
-    const board = cpu.getGrid().getBoard();
-    const boardElement = board[row][col];
+    const cpuBoard = cpu.getGrid().getBoard();
+    const boardElement = cpuBoard[row][col];
     const shipName = this.getShipNameFromBoard(boardElement);
     const battleship = cpu.getGrid().getShip(shipName);
 
@@ -213,8 +212,8 @@ class battleDOMS {
 
     if (boardElement === 'x') {
         await this.playerMiss(fieldNode);
-    } else {
-        console.log('Player hit');
+    } 
+    else {
         return await this.playerHit(fieldNode);
     }
 
@@ -222,14 +221,10 @@ class battleDOMS {
     await this.timeoutOneSecond();
     await this.turnEnd('player');
 
-    console.log('Player action ends');
     return 'miss';
   }
 
-
-
   async cpuPlays() {
-
     const player = Game.getPlayer();
     const [row, col] = player.computerTurn();
 
@@ -237,8 +232,6 @@ class battleDOMS {
     const boardElement = board[row][col];
     const shipName = this.getShipNameFromBoard(boardElement);
     const battleship = player.getGrid().getShip(shipName);
-
-    console.log("computer shot at " + row + " " + col);
 
     await this.shotOnTurnPlay('cpu');
 
@@ -248,7 +241,8 @@ class battleDOMS {
         await this.timeoutOneSecond();
         await this.turnEnd('cpu');
         return 'miss';
-    } else {
+    } 
+    else {
         return await this.cpuHit(row, col);
     }
   }
@@ -257,7 +251,8 @@ class battleDOMS {
     if (playerOrCpu === 'player') {
       Sound.shot();
       await this.timeoutHalfSecond();
-    } else {
+    } 
+    else {
       this.displayPlayerNoCommentMessage();
       await this.timeoutOneSecond();
       Sound.shot();
@@ -272,75 +267,76 @@ class battleDOMS {
   }
 
   async cpuMiss(row, col) {
-    const friendlyBoard = document.getElementById('field-container-friendly');
-    const player = Game.getPlayer(); 
-    const index = helper.getIndexFromCoordinates(row, col);
+    const friendlyBoardElement = document.getElementById('field-container-friendly');
+    const player = Game.getPlayer();
+    const fieldIndex = helper.getIndexFromCoordinates(row, col);
 
-    this.addMissStyle(friendlyBoard.children[index]);
-    player.getGrid().getBoard()[row][col] = 'miss'; 
+    this.addMissStyle(friendlyBoardElement.children[fieldIndex]);
+    player.getGrid().getBoard()[row][col] = 'miss';
     await this.timeoutMissileLength();
     Sound.miss();
   }
 
   async playerHit(fieldNode) {
-    const cpu = Game.getCPU();  
-    const index = [...fieldNode.parentNode.children].indexOf(fieldNode);
-    const [row, col] = helper.getCoordinatesFromIndex(index);
+    const cpuPlayer = Game.getCPU();
+    const fieldIndex = [...fieldNode.parentNode.children].indexOf(fieldNode);
+    const [row, col] = helper.getCoordinatesFromIndex(fieldIndex);
 
-    const boardElement = cpu.getGrid().getBoard()[row][col]; 
+    const boardElement = cpuPlayer.getGrid().getBoard()[row][col];
     const shipName = this.getShipNameFromBoard(boardElement);
-    const battleship = cpu.getGrid().getShip(shipName); 
+    const battleship = cpuPlayer.getGrid().getShip(shipName);
 
     this.addHitStyle(fieldNode);
-    this.loadShipIfSunk({ cpu, battleship, row, col });
+    this.loadShipIfSunk({ cpu: cpuPlayer, battleship, row, col });
     await this.timeoutMissileLength();
     Sound.hit();
     this.displayPlayerMessage(boardElement, battleship);
 
     await this.timeoutOneSecond();
-    if (cpu.hasLost()) return this.showPlayerWinModal();
+
+    if (cpuPlayer.hasLost()) {
+      return this.showPlayerWinModal();
+    }
+
     this.initBoardFields();
+    return 'hit';
+  }
+
+  async cpuHit(row, col) {
+    const friendlyBoardElement = document.getElementById('field-container-friendly');
+    const player = Game.getPlayer();
+    const fieldIndex = helper.getIndexFromCoordinates(row, col);
+
+    const boardElement = player.getGrid().getBoard()[row][col];
+    const shipName = this.getShipNameFromBoard(boardElement);
+    const battleship = player.getGrid().getShip(shipName);
+
+    this.addHitStyle(friendlyBoardElement.children[fieldIndex]);
+    player.getGrid().getBoard()[row][col] = 'hit';
+    await this.timeoutMissileLength();
+    Sound.hit();
+    this.displayEnemyMessage(boardElement, battleship);
+    if (player.hasLost()) return this.showEnemyWinModal();
 
     return 'hit';
-}
-
-async cpuHit(row, col) {
-  const friendlyBoard = document.getElementById('field-container-friendly');
-  const player = Game.getPlayer();  
-  const index = helper.getIndexFromCoordinates(row, col);
-
-  const boardElement = player.getGrid().getBoard()[row][col]; 
-  const shipName = this.getShipNameFromBoard(boardElement);
-  const battleship = player.getGrid().getShip(shipName);  
-
-  this.addHitStyle(friendlyBoard.children[index]);
-  player.getGrid().getBoard()[row][col] = 'hit';  
-  await this.timeoutMissileLength();
-  Sound.hit();
-  this.displayEnemyMessage(boardElement, battleship);
-  if (player.hasLost()) return this.showEnemyWinModal(); 
-
-  return 'hit';
-}
+  }
 
 
-async turnEnd(playerOrCpu) {
-    console.log(`${playerOrCpu} turn ends`);
+  async turnEnd(playerOrCpu) {;
     await this.timeoutOneAndHalfSecond();
 
     if (playerOrCpu === 'player') {
         this.styleOffTurn(document.querySelector('.message.battle.agent'));
         this.styleOnTurn(document.querySelector('.message.battle.enemy'));
         this.resizePlayerOffTurn();
-    } else {
+    } 
+    else {
         this.styleOffTurn(document.querySelector('.message.battle.enemy'));
         this.styleOnTurn(document.querySelector('.message.battle.agent'));
         this.resizePlayerOnTurn();
         this.initBoardFields();
     }
-}
-
-
+  }
 
   displayPlayerShips() {
     const friendlyBoard = document.getElementById('field-container-friendly');
@@ -351,23 +347,25 @@ async turnEnd(playerOrCpu) {
   }
 
   loadShipIfSunk(data) {
-    const board = document.getElementById('field-container-enemy');
-    const map = data.cpu.getGrid();
-    const boardArray = map.getBoard();
+    const enemyBoardElement = document.getElementById('field-container-enemy');
+    const cpuGrid = data.cpu.getGrid();
+    const boardArray = cpuGrid.getBoard();
 
-    map.receiveAttack([data.row, data.col]);
+    cpuGrid.receiveAttack([data.row, data.col]);
     if (data.battleship.isSunk) {
-      const element = boardArray[data.row][data.col];
-      const [row, col] = this.findOrigin(boardArray, boardArray[data.row][data.col]);
-      fleet.loadShipOnBoard(data.cpu, { map, board, element, row, col });
+        const element = boardArray[data.row][data.col];
+        const [originRow, originCol] = this.findOrigin(boardArray, element);
+        fleet.loadShipOnBoard(data.cpu, { map: cpuGrid, board: enemyBoardElement, element, row: originRow, col: originCol });
     }
-  }
+  } 
 
   findOrigin(board, element) {
-    for (let i = 0; i < board.length; i += 1) {
-      for (let j = 0; j < board[0].length; j += 1) {
-        if (board[i][j] === element) return [i, j];
-      }
+    for (let row = 0; row < board.length; row++) {
+        for (let col = 0; col < board[row].length; col++) {
+            if (board[row][col] === element) {
+                return [row, col];
+            }
+        }
     }
     return [0, 0];
   }
@@ -395,10 +393,12 @@ async turnEnd(playerOrCpu) {
     if (boardElement !== 'x') {
       if (ship && !ship.isSunk) {
         this.displayMessage(agent, Message.getNewEnemyHitMessage(agent.textContent));
-      } else if (ship.isSunk) {
+      } 
+      else if (ship.isSunk) {
         this.displayMessage(agent, Message.getNewEnemySunkMessage(agent.textContent));
       }
-    } else {
+    } 
+    else {
       this.displayMessage(agent, Message.getNewPlayerMissMessage(agent.textContent));
     }
 
@@ -413,10 +413,12 @@ async turnEnd(playerOrCpu) {
     if (boardElement !== 'x' && boardElement !== 'miss') {
       if (ship && !ship.isSunk) {
         this.displayMessage(enemy, Message.getNewPlayerHitMessage(enemy.textContent));
-      } else if (ship.isSunk) {
+      } 
+      else if (ship.isSunk) {
         this.displayMessage(enemy, Message.getNewPlayerSunkMessage(enemy.textContent));
       }
-    } else {
+    }
+    else {
       this.displayMessage(enemy, Message.getNewEnemyMissMessage(enemy.textContent));
     }
   }
@@ -492,8 +494,6 @@ async turnEnd(playerOrCpu) {
     node.classList.remove('on-turn');
     node.classList.add('off-turn');
   }
-
-  // TIMEOUTS
 
   timeoutOneAndHalfSecond() {
     return new Promise((resolve) => setTimeout(resolve, 1500));

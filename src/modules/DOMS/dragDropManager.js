@@ -5,6 +5,7 @@ import helper from './helper';
 import Component from './reusables';
 
 class DragDropManager {
+  
   constructor() {
     this.fieldQueue = [];
     this.touchMove = false;
@@ -23,8 +24,6 @@ class DragDropManager {
   emptyFieldQueue() {
     this.fieldQueue = [];
   }
-
-  // LISTENERS
 
   dragStart() {
     const fleetContainer = document.getElementById('fleet-setup');
@@ -102,8 +101,6 @@ class DragDropManager {
       });
     });
   }
-
-  // HANDLERS
 
   dragStartHandler(event, node) {
     this.addShipOnDragStart(node);
