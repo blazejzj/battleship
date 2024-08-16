@@ -5,8 +5,8 @@ import backgroundOcean from '../../assets/sounds/backgroundOcean.mp3';
 
 class SoundManager {
   constructor() {
-    this.audioCtx = null; // Initialize as null to create after user interaction
-    this.backgroundSource = null; // To keep track of the background audio source
+    this.audioCtx = null;
+    this.backgroundSource = null; 
   }
 
   initAudioContext() {
@@ -17,20 +17,21 @@ class SoundManager {
     }
   }
 
-  playSound(soundUrl) {
-    this.initAudioContext(); // Initialize or resume AudioContext before playing sound
-    const request = new XMLHttpRequest();
-    request.open('GET', soundUrl, true);
-    request.responseType = 'arraybuffer';
-    request.onload = () => {
-      this.audioCtx.decodeAudioData(request.response, (buffer) => {
-        const source = this.audioCtx.createBufferSource();
-        source.buffer = buffer;
-        source.connect(this.audioCtx.destination);
-        source.start(0);
-      });
-    };
-    request.send();
+  async playSound(soundUrl) {
+    this.initAudioContext();
+  
+    try {
+      const response = await fetch(soundUrl);
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await this.audioCtx.decodeAudioData(arrayBuffer);
+  
+      const source = this.audioCtx.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(this.audioCtx.destination);
+      source.start(0);
+    } catch (error) {
+      console.error('Error playing sound:', error);
+    }
   }
 
   shot() {
@@ -59,10 +60,15 @@ class SoundManager {
   }
 
   BackgroundOnFirstTouch() {
-    const unlockAudio = () => {
-      this.playBackground(); // Start background audio on user gesture
-      document.removeEventListener('click', unlockAudio);
-      document.removeEventListener('touchstart', unlockAudio);
+    const unlockAudio = async () => {
+      try {
+        await this.playBackground(); // Play background audio
+      } catch (error) {
+        console.error('Error playing background audio:', error);
+      } finally {
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('touchstart', unlockAudio);
+      }
     };
 
     if (/Android|iPhone/i.test(navigator.userAgent)) {
@@ -74,7 +80,7 @@ class SoundManager {
 
   stopBackground() {
     if (this.backgroundSource) {
-      this.backgroundSource.stop(); // Stop the background audio
+      this.backgroundSource.stop();
       this.backgroundSource = null;
     }
   }
