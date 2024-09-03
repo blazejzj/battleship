@@ -9,7 +9,6 @@ class gameBoard {
   }
 
   // Getters
-
   getBoard() {
     return this.board;
   }
@@ -31,7 +30,6 @@ class gameBoard {
   }
 
   // Setters
-
   setAxisX() {
     this.axis = 'X';
   }
@@ -48,8 +46,6 @@ class gameBoard {
   setAllShipsNotFound() {
     this.fleet.forEach(ship => ship.resetFound());
   }
-
-  // Methods
 
   addToFleet(ship) {
     let newShip;

@@ -6,6 +6,14 @@ import Message from '../utils/message';
 import DragDrop from './dragDropManager';
 
 class SetupManager {
+
+  initButtons() {
+    this.initAxisButtons();
+    this.initResetContinueButtons();
+    this.disableContinueButton();
+    this.setTabIndex();
+  }
+
   loadSetupContent() {
     const app = document.getElementById('app');
     app.classList.replace('pregame', 'setup');
@@ -121,13 +129,6 @@ class SetupManager {
     Component.addTypeWriterMessage(message, Message.getWelcomeMessage());
   }
 
-  initButtons() {
-    this.initAxisButtons();
-    this.initResetContinueButtons();
-    this.disableContinueButton();
-    this.setTabIndex();
-  }
-
   initAxisButtons() {
     const buttonX = document.getElementById('x-button');
     const buttonY = document.getElementById('y-button');
@@ -193,6 +194,7 @@ class SetupManager {
   }
 
   resetArray(array) {
+    // reset the array to its initial state
     for (let i = 0; i < array.length; i += 1) {
       for (let j = 0; j < array[0].length; j += 1) {
         array[i][j] = 'x';
@@ -202,7 +204,7 @@ class SetupManager {
 
   removePlacedShips(parentNode) {
     const ships = parentNode.querySelectorAll('.ship-image-container');
-    ships.forEach((ship) => ship.remove());
+    ships.forEach((ship) => ship.remove()); // remove all placed ships
   }
 
   handleContinue() {

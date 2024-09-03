@@ -263,7 +263,6 @@ class DragDropManager {
     const shipLength = parseInt(node.dataset.shipLength, 10);
 
     if (isNaN(shipLength)) {
-      console.error('Invalid ship length:', shipLength);
       return;
     }
 
@@ -287,6 +286,7 @@ class DragDropManager {
     if (!isPlaced) return;
 
     const battleship = document.querySelector(`[data-ship-name=${shipOnDrag}]`);
+    
     if (battleship) {
       battleship.classList.add('hidden');
     }
@@ -303,18 +303,10 @@ class DragDropManager {
     let { length } = shipOnDrag;
     this.emptyFieldQueue();
 
-    console.log("player:", player);
-    console.log("map:", map);
-    console.log("board:", board);
-    console.log("axis:", axis);
-    console.log("shipOnDrag:", shipOnDrag);
-    console.log("index:", index);
-
     let isTaken = false;
     if (axis === 'X') {
         for (let i = index; i < helper.roundNearestTenExceptZero(index + 1); i += 1) {
             const [x, y] = helper.getCoordinatesFromIndex(i);
-            console.log(`X axis - i: ${i}, x: ${x}, y: ${y}`);
             if (length === 0) break;
             parentNode.children[i].classList.add('hovering');
             this.fieldQueue.push(i);
@@ -327,7 +319,6 @@ class DragDropManager {
     if (axis === 'Y') {
         for (let i = index; i < 100; i += 10) {
             const [x, y] = helper.getCoordinatesFromIndex(i);
-            console.log(`Y axis - i: ${i}, x: ${x}, y: ${y}`);
             if (length === 0) break;
             parentNode.children[i].classList.add('hovering');
             this.fieldQueue.push(i);

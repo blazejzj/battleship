@@ -7,13 +7,11 @@ class Prelaunch {
     app.classList.add('pregame');
 
     const pregameCard = this.createPregameCard();
-
     helper.appendAll(app, [pregameCard]);
   }
 
   createPregameCard() {
     const section = helper.create('section', { className: 'pregame-card' });
-
     const title = this.createTitle();
     const nameForm = this.createNameForm();
     const playNowButton = this.createPlayNowButton();

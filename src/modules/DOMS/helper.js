@@ -23,6 +23,7 @@ class Helper {
   
     createMap(description) {
       const map = document.createElement('div');
+
       map.id = `board-${description}`;
       map.classList.add('board', description);
   
@@ -36,8 +37,8 @@ class Helper {
     createLettersSection() {
       const letterContainer = document.createElement('div')
       letterContainer.classList = 'letter-container';
+
       const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-  
       letters.forEach((element) => {
         const letter = document.createElement('div');
         letter.className = 'letter';
@@ -72,9 +73,7 @@ class Helper {
       const boardSize = this.BOARD_SIZE;
 
       for (let i = 0; i < boardSize; i += 1) {
-        console.log("ROW NR: ", i);
         for (let j = 0; j < boardSize; j += 1) {
-          console.log("FIELD NR: ", i * boardSize + j);
           const field = document.createElement('div');
           field.className = 'field';
           board.appendChild(field);
@@ -85,10 +84,6 @@ class Helper {
     };
   
     create(type, data) {
-      if (!type) {
-        console.log('missing type');
-      } // debug
-  
       const element = document.createElement(type);
   
       for (const [key, value] of Object.entries(data)) {

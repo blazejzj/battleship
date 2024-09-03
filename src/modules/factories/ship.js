@@ -8,7 +8,6 @@ class Ship {
   }
 
   // Getters
-
   getName() {
     return this.name;
   }
@@ -30,7 +29,6 @@ class Ship {
   }
 
   // Setters
-
   setName(newName) {
     this.name = newName;
   }
@@ -52,7 +50,6 @@ class Ship {
   }
 
   // Methods
-
   hit() {
     this.hits += 1;
     if (this.hits === this.length) {

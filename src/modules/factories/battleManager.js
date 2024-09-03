@@ -6,7 +6,6 @@ class battleManager {
   }
 
   // Getters
-
   getPlayer() {
     return this.state.player; 
   }
@@ -16,12 +15,9 @@ class battleManager {
   }
 
   // Setters
-
   setPlayerName(name = 'Captain') {
     this.getPlayer().setAlias(name);
   }
-
-  // Methods
 
   initializeGame() {
     const player = new Player('Captain', 'player'); 

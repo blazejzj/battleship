@@ -1,10 +1,8 @@
-// ASSETS
 import carrier from '../../assets/images/carrierX.svg';
 import battleship from '../../assets/images/battleshipX.svg';
 import cruiser from '../../assets/images/cruiserX.svg';
 import submarine from '../../assets/images/submarineX.svg';
 import destroyer from '../../assets/images/destroyerX.svg';
-// FACTORIES
 import Game from '../factories/battleManager';
 import helper from './helper';
 
@@ -51,7 +49,9 @@ class FleetManager {
 
     let rotation = 'rotate(0deg)';
 
-    if (axis === 'Y') rotation = 'rotate(90deg) translate(0,-100%)';
+    if (axis === 'Y') {
+      rotation = 'rotate(90deg) translate(0,-100%)';
+    }
 
     const currentTime = this.getCurrentTime();
 
@@ -75,6 +75,7 @@ class FleetManager {
       className:
         player.isCpu === true ? `${shipName}-cpu` : `${shipName}-player`,
     });
+
     image.src = this.loadShipImage(shipName);
     image.style.height = '95%';
     image.style.aspectRatio = `${length}/1`;

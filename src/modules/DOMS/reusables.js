@@ -15,15 +15,13 @@ class ComponentManager {
 
   createMessageSection(classNamesArray) {
     const section = helper.create('section', { className: 'message' });
-    // SET ALL PASSED CLASSES
-    classNamesArray.forEach((el) => section.classList.add(el));
-    const character = classNamesArray[1];
 
+    // add classes to the section
+    classNamesArray.forEach((el) => section.classList.add(el));
+
+    const character = classNamesArray[1];
     const image = helper.create('img', { className: 'message-image' });
-    const imageName =
-      classNamesArray[1] === 'agent' || classNamesArray[1] === 'agent-win'
-        ? 'agent'
-        : 'enemy';
+    const imageName = classNamesArray[1] === 'agent' || classNamesArray[1] === 'agent-win' ? 'agent' : 'enemy';
     image.src = this.images[imageName];
 
     section.appendChild(image);
@@ -60,6 +58,7 @@ class ComponentManager {
       className: 'ship-card',
       draggable: 'true',
     });
+    
     const content = helper.create('div', { className: 'ship-content' });
     const image = helper.create('img', { className: 'ship-image' });
     const name = helper.create('p', { className: 'ship-name' });

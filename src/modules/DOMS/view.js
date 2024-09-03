@@ -23,14 +23,12 @@ class ViewManager {
     DragDrop.initDraggableFields();
   }
 
-    setPlayerName() {
+  setPlayerName() {
     const name = document.getElementById('name-input').value.toString().trim();
     if (name) {
         Game.getPlayer().setAlias(`Captain ${name}`); 
     }
-    console.log(name);
-    }
-
+  } 
 }
 
 export default new ViewManager();
