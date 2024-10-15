@@ -1,30 +1,30 @@
-import Player from './player';
+import Player from "./player";
 
 class battleManager {
-  constructor() {
-    this.state = this.initializeGame(); 
-  }
+    constructor() {
+        this.state = this.initializeGame();
+    }
 
-  // Getters
-  getPlayer() {
-    return this.state.player; 
-  }
+    // Getters
+    getPlayer() {
+        return this.state.player;
+    }
 
-  getCPU() {
-    return this.state.cpu; 
-  }
+    getCPU() {
+        return this.state.cpu;
+    }
 
-  // Setters
-  setPlayerName(name = 'Captain') {
-    this.getPlayer().setAlias(name);
-  }
+    // Setters
+    setPlayerName(name = "Captain") {
+        this.getPlayer().setAlias(name);
+    }
 
-  initializeGame() {
-    const player = new Player('Captain', 'player'); 
-    const cpu = new Player('cpu', 'cpu'); 
+    initializeGame() {
+        const player = new Player("Captain", "player");
+        const cpu = new Player("cpu", "cpu");
 
-    return { player, cpu }; 
-  }
+        return { player, cpu };
+    }
 }
 
 export default new battleManager();
