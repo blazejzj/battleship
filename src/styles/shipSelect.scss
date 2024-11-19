@@ -1,10 +1,11 @@
 .fleet-setup {
-    @include flexColumnCenter;
+    display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     border-radius: $main-border-radius;
-  }
-  
-  .ship-card {
+}
+
+.ship-card {
     @include flexRowCenter;
     flex: 1;
     position: relative;
@@ -23,144 +24,144 @@
     -webkit-filter: brightness(0.5);
     filter: brightness(0.5);
     &:focus {
-      box-shadow: none;
-      -webkit-filter: brightness(1);
-      filter: brightness(1);
-      .ship-content {
-        position: relative;
-        z-index: 1;
-        pointer-events: none;
-        .ship-image {
-          position: relative;
-          z-index: 2;
-          -webkit-filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
-            brightness(100%) contrast(104%);
-          filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
-            brightness(100%) contrast(104%);
+        box-shadow: none;
+        -webkit-filter: brightness(1);
+        filter: brightness(1);
+        .ship-content {
+            position: relative;
+            z-index: 1;
+            pointer-events: none;
+            .ship-image {
+                position: relative;
+                z-index: 2;
+                -webkit-filter: invert(100%) sepia(0%) saturate(0%)
+                    hue-rotate(8deg) brightness(100%) contrast(104%);
+                filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
+                    brightness(100%) contrast(104%);
+            }
         }
-      }
     }
     &.hidden {
-      @include mainBackground;
-      box-shadow: none;
-      pointer-events: none;
-      opacity: 0.5;
-      -webkit-filter: brightness(0.5);
-      filter: brightness(0.5);
-      &::before,
-      &::after {
-        background: transparent;
-      }
-      .ship-content {
-        visibility: hidden;
-      }
+        @include mainBackground;
+        box-shadow: none;
+        pointer-events: none;
+        opacity: 0.5;
+        -webkit-filter: brightness(0.5);
+        filter: brightness(0.5);
+        &::before,
+        &::after {
+            background: transparent;
+        }
+        .ship-content {
+            visibility: hidden;
+        }
     }
     .ship-content {
-      img {
-        height: min(calc(1rem + 1.5vw), 2rem);
-        max-width: 100%;
-        -webkit-filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
-          brightness(105%) contrast(100%);
-        filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
-          brightness(105%) contrast(100%);
-        pointer-events: none;
-        position: relative;
-        z-index: 3;
-      }
-      .ship-name {
-        position: relative;
-        z-index: 3;
-        font-size: $font-size-ship-card;
-      }
+        img {
+            height: min(calc(1rem + 1.5vw), 2rem);
+            max-width: 100%;
+            -webkit-filter: invert(100%) sepia(8%) saturate(37%)
+                hue-rotate(328deg) brightness(105%) contrast(100%);
+            filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
+                brightness(105%) contrast(100%);
+            pointer-events: none;
+            position: relative;
+            z-index: 3;
+        }
+        .ship-name {
+            position: relative;
+            z-index: 3;
+            font-size: $font-pregame-battelship;
+        }
     }
-  }
-  .ship-card[data-ship-name='carrier'] {
+}
+.ship-card[data-ship-name="carrier"] {
     order: 1;
     img {
-      aspect-ratio: 4/1;
+        aspect-ratio: 4/1;
     }
-  }
-  .ship-card[data-ship-name='battleship'] {
+}
+.ship-card[data-ship-name="battleship"] {
     order: 2;
     img {
-      aspect-ratio: 3.5/1;
+        aspect-ratio: 3.5/1;
     }
-  }
-  .ship-card[data-ship-name='cruiser'] {
+}
+.ship-card[data-ship-name="cruiser"] {
     order: 3;
     img {
-      aspect-ratio: 3/1;
+        aspect-ratio: 3/1;
     }
-  }
-  .ship-card[data-ship-name='submarine'] {
+}
+.ship-card[data-ship-name="submarine"] {
     order: 4;
     img {
-      aspect-ratio: 3/1;
+        aspect-ratio: 3/1;
     }
-  }
-  .ship-card[data-ship-name='destroyer'] {
+}
+.ship-card[data-ship-name="destroyer"] {
     order: 5;
     img {
-      aspect-ratio: 2/1;
+        aspect-ratio: 2/1;
     }
-  }
-  
-  .ship-card:before,
-  .ship-card:after {
+}
+
+.ship-card:before,
+.ship-card:after {
     @include pseudoUnderlay;
-    background: rgb(0, 0, 0);
+    background: rgb(12, 12, 12);
     transition: all 0.2s linear, visibility 0.01s linear;
-  }
-  
-  .ship-card:before {
+}
+
+.ship-card:before {
     width: calc(100% + 0.375rem);
     height: calc(100% - 1rem);
     top: 0.5rem;
     left: -0.1875rem;
-  }
-  
-  .ship-card:after {
+}
+
+.ship-card:after {
     width: calc(100% - 1rem);
     height: calc(100% + 0.375rem);
     top: -0.1875rem;
     left: 0.5rem;
-  }
-  
-  .ship-card:hover:before,
-  .ship-card:focus:before {
+}
+
+.ship-card:hover:before,
+.ship-card:focus:before {
     height: calc(100% - 2rem);
     top: 1rem;
-  }
-  
-  .ship-card:hover:after,
-  .ship-card:focus:after {
+}
+
+.ship-card:hover:after,
+.ship-card:focus:after {
     width: calc(100% - 2rem);
     left: 1rem;
-  }
-  
-  .ship-card:active {
+}
+
+.ship-card:active {
     transform: scale(0.95);
-  }
-  
-  .ship-card:hover {
+}
+
+.ship-card:hover {
     cursor: -webkit-grab;
     cursor: grab;
-  }
-  
-  @media screen and (max-width: 30rem) {
-    .ship-card[data-ship-name='carrier'] {
-      order: 5;
+}
+
+@media screen and (max-width: 40rem) {
+    .ship-card[data-ship-name="carrier"] {
+        order: 5;
     }
-    .ship-card[data-ship-name='battleship'] {
-      order: 4;
+    .ship-card[data-ship-name="battleship"] {
+        order: 4;
     }
-    .ship-card[data-ship-name='cruiser'] {
-      order: 3;
+    .ship-card[data-ship-name="cruiser"] {
+        order: 3;
     }
-    .ship-card[data-ship-name='submarine'] {
-      order: 2;
+    .ship-card[data-ship-name="submarine"] {
+        order: 2;
     }
-    .ship-card[data-ship-name='destroyer'] {
-      order: 1;
+    .ship-card[data-ship-name="destroyer"] {
+        order: 1;
     }
-  }
+}
