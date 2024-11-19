@@ -19,7 +19,7 @@
         position: relative;
         line-height: 1;
         font-family: $font-pregame-battelship;
-        font-size: 4rem;
+        font-size: $title-font-size;
         letter-spacing: 0.1rem;
     }
     .name-form {
@@ -31,7 +31,7 @@
 @media screen and (max-width: 30rem) {
     .pregame-card {
         h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
         }
     }
 }
