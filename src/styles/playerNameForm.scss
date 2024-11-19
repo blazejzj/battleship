@@ -10,7 +10,6 @@
         padding-inline: 0.5em;
         padding-block: 0.7em;
         border: none;
-        border-bottom: 0.1rem solid $transparent-low-grey-color;
         font-size: min(calc(0.6rem + 0.6vw), 1rem);
         color: $main-color;
         background-color: transparent;
@@ -29,10 +28,8 @@
         &::placeholder {
             color: $transparent-low-grey-color;
         }
-        &:hover,
         &:focus {
             outline: none;
-            background: $input-background-color;
         }
         &:focus ~ .input-border {
             width: 100%;
