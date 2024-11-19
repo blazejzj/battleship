@@ -43,7 +43,8 @@
 }
 .play-now-button:hover .text-play-button,
 .play-now-button:focus .text-play-button {
-    color: rgb(87, 86, 86);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
 }
 .play-now-button::before {
     content: "";
