@@ -9,23 +9,25 @@
     border: none;
     background-color: transparent;
     cursor: crosshair;
-    mask: url('../assets/images/battleshipX.svg') no-repeat 50% 50%;
-    -webkit-mask: url('../assets/images/battleshipX.svg') no-repeat 50% 50%;
-  }
-  .play-now-button:after {
+    mask: url("../assets/images/swords.svg") no-repeat 50% 50%;
+    -webkit-mask: url("../assets/images/swords.svg") no-repeat 50% 50%;
+    z-index: 1;
+    overflow: hidden;
+}
+.play-now-button:after {
     @include pseudoOverlay;
     left: 0;
     right: 0;
     bottom: 0;
     transition: all ease;
     transition-duration: 0.3s;
-  }
-  .play-now-button:hover:after,
-  .play-now-button:focus:after {
+}
+.play-now-button:hover:after,
+.play-now-button:focus:after {
     transition-duration: 2s;
     box-shadow: $play-now-button-box-shadow;
-  }
-  .play-now-button .text-play-button {
+}
+.play-now-button .text-play-button {
     position: absolute;
     left: 50%;
     bottom: 0;
@@ -33,18 +35,20 @@
     line-height: 2.5;
     font-size: $caps-button-font-size;
     letter-spacing: $caps-button-letter-spacing;
+    font-family: $font-pregame-battelship;
     text-align: center;
     color: $main-color;
     transform: translate(-50%);
     transition: color 0.8s ease;
     padding: 0;
     margin: 0;
-  }
-  .play-now-button:hover .text-play-button,
-  .play-now-button:focus .text-play-button {
+    z-index: 2;
+}
+.play-now-button:hover .text-play-button,
+.play-now-button:focus .text-play-button {
     color: $main-opposite-color;
-  }
-  .play-now-button:before {
+}
+.play-now-button:before {
     @include pseudoUnderlay;
     left: 50%;
     top: 50%;
@@ -53,13 +57,15 @@
     background-color: $main-color;
     transform: translate(-50%, -50%);
     transition: width 0.8s ease;
-  }
-  .play-now-button:hover:before,
-  .play-now-button:focus:before {
+
+    z-index: 0;
+}
+.play-now-button:hover:before,
+.play-now-button:focus:before {
     width: 100%;
-  }
-  
-  .github-button {
+}
+
+.github-button {
     @include flexColumnCenter;
     @include mainBackground;
     position: relative;
@@ -75,17 +81,17 @@
     overflow: hidden;
     transition: color 0.5s;
     cursor: pointer;
-  }
-  
-  .github-button:hover,
-  .github-button:focus {
+}
+
+.github-button:hover,
+.github-button:focus {
     color: transparent;
-  }
-  
-  .github-button:before {
-    content: '';
-    background: $main-color url('../assets/images/github.svg') center center / contain
-      no-repeat;
+}
+
+.github-button:before {
+    content: "";
+    background: $main-color url("../assets/images/github.svg") center center /
+        contain no-repeat;
     position: absolute;
     z-index: 2;
     left: -20%;
@@ -94,10 +100,10 @@
     bottom: 0;
     transform: scale(0);
     transition: all 0.5s;
-  }
-  
-  .github-button:after {
-    content: '';
+}
+
+.github-button:after {
+    content: "";
     background: $main-color;
     position: absolute;
     z-index: -1;
@@ -107,21 +113,21 @@
     bottom: 0;
     transform: skewX(0) scale(0, 1);
     transition: all 0.5s;
-  }
-  
-  .github-button:hover::before,
-  .github-button:hover:after,
-  .github-button:focus::before,
-  .github-button:focus:after {
+}
+
+.github-button:hover::before,
+.github-button:hover:after,
+.github-button:focus::before,
+.github-button:focus:after {
     transition: all 0.5s;
-  }
-  
-  .github-button:hover::before,
-  .github-button:focus::before {
+}
+
+.github-button:hover::before,
+.github-button:focus::before {
     transform: scale(0.6);
-  }
-  
-  .github-button:hover:after,
-  .github-button:focus:after {
+}
+
+.github-button:hover:after,
+.github-button:focus:after {
     transform: skewX(-45deg) scale(1, 1);
-  }
+}
