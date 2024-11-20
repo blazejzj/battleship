@@ -1,6 +1,5 @@
 .fleet-setup {
-    display: flex;
-    justify-content: center;
+    @include flexColumnCenter;
     flex-wrap: wrap;
     border-radius: $main-border-radius;
 }
