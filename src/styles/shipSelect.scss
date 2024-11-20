@@ -9,8 +9,8 @@
     @include flexRowCenter;
     flex: 1;
     position: relative;
-    max-width: 9.375rem;
-    min-width: 6.25rem;
+    max-width: 9.4rem;
+    min-width: 6.3rem;
     margin: calc(0.25rem + 0.5vw);
     padding: 0.25rem;
     border: 0.125rem solid white;
@@ -71,7 +71,7 @@
         .ship-name {
             position: relative;
             z-index: 3;
-            font-size: $font-pregame-battelship;
+            font-size: $font-size-ship-card;
         }
     }
 }
