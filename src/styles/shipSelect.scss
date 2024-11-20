@@ -1,5 +1,6 @@
 .fleet-setup {
-    @include flexColumnCenter;
+    display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
     border-radius: $main-border-radius;
 }

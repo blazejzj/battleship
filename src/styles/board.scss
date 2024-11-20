@@ -14,6 +14,8 @@
 
 .board {
     width: 100%;
+    place-self: center;
+    width: 100%;
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: auto auto;

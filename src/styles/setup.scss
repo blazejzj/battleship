@@ -47,13 +47,16 @@
 
 .setup-container {
     @include mainBackground;
+    display: flex;
+    align-content: center;
+    justify-content: center;
     max-width: $setup-max-width;
     margin: 0 auto;
     padding: 1rem;
 }
 .board-fleet-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     gap: 1rem;
     margin-top: 0.5rem;
 }
