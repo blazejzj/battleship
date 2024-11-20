@@ -117,13 +117,13 @@ class SetupManager {
         const resetButton = helper.create("button", {
             id: "reset-button",
             className: "reset-button",
-            textContent: "Reset",
+            textContent: "Reset Fleet",
         });
 
         const continueButton = helper.create("button", {
             id: "continue-button",
             className: "continue-button",
-            textContent: "Confirm",
+            textContent: "To Battle!",
         });
 
         helper.appendAll(container, [resetButton, continueButton]);
