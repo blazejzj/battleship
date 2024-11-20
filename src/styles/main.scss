@@ -48,9 +48,13 @@ body {
 
 body {
     min-height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        /* Dark overlay */ url("../assets/images/world_map_grid.svg") bottom /
-            cover no-repeat;
+    background: radial-gradient(
+            circle,
+            rgba(0, 0, 0, 0) 10%,
+            rgba(0, 0, 0, 0.7) 70%
+        ),
+        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("../assets/images/world_map_grid.svg") bottom / cover no-repeat;
     overflow-x: hidden;
 }
 
