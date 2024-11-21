@@ -292,9 +292,17 @@
         }
     }
 
-    .field.hit::before,
-    .field.miss::before {
+    .field.hit::after,
+    .field.miss::after {
         transform: none !important;
         animation: none !important;
+        width: 30%; /* Ensure a consistent size */
+        height: 30%; /* Ensure a consistent size */
+        border-radius: 100%; /* Keep it circular */
+        background-color: rgba(255, 0, 0, 0.5); /* Hit color */
+    }
+
+    .field.miss::after {
+        background-color: rgba(0, 153, 255, 0.5); /* Miss color */
     }
 }
