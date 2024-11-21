@@ -97,11 +97,11 @@
             left: 50%;
             width: 0;
             height: 0;
-            background-color: rgba(112, 205, 241, 0.3); /* Pulse color */
-            border-radius: 50%; /* Make it a circle */
+            background-color: rgba(112, 205, 241, 0.3);
+            border-radius: 50%;
             transform: translate(-50%, -50%);
-            animation: radarPulse 3s infinite; /* Duration and repeat */
-            pointer-events: none; /* Ensure it doesn't interfere with mouse events */
+            animation: radarPulse 3s infinite;
+            pointer-events: none;
         }
         img {
             -webkit-filter: invert(67%) sepia(88%) saturate(286%)
@@ -114,7 +114,6 @@
             @include flexRowCenter;
             aspect-ratio: 1/1;
             position: relative;
-            // border: 1px solid $white-low;
             &.no-drop,
             &.no-drop * {
                 pointer-events: none;

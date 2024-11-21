@@ -562,7 +562,7 @@ class battleDOMS {
     }
 
     timeoutMissileLength() {
-        return new Promise((resolve) => setTimeout(resolve, 300));
+        return new Promise((resolve) => setTimeout(resolve, 500));
     }
 }
 
