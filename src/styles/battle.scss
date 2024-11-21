@@ -71,64 +71,15 @@
                 opacity: 0;
             }
 
-            &.hit::after {
-                background-color: rgba(
-                    255,
-                    0,
-                    0,
-                    0.5
-                ); /* Red color for 'hit' */
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 2px; /* Adjust for thickness */
-                height: 100%; /* Full height for vertical line */
-                transform: translate(-50%, -50%);
-                animation: ripple 0.5s 0.2s 1;
-                -webkit-animation: ripple 0.5s 0.2s 1;
-                animation-delay: 0.35s;
-                -webkit-animation-delay: 0.35s;
-                -webkit-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
-            }
-
             &.hit::before {
-                background-color: rgba(
-                    255,
-                    0,
-                    0,
-                    0.5
-                ); /* Red color for 'hit' */
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 100%; /* Full width for horizontal line */
-                height: 2px; /* Adjust for thickness */
-                transform: translate(-50%, -50%);
-                animation: ripple 0.5s 0.2s 1;
-                -webkit-animation: ripple 0.5s 0.2s 1;
-                animation-delay: 0.35s;
-                -webkit-animation-delay: 0.35s;
+                animation: shot 0.35s 0.175s 1;
+                -webkit-animation: shot 0.35s 0.175s 1;
                 -webkit-animation-fill-mode: forwards;
                 animation-fill-mode: forwards;
             }
 
-            &.miss::after {
-                background-color: rgba(
-                    0,
-                    153,
-                    255,
-                    0.5
-                ); /* Blue color for 'miss' */
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 2px; /* Adjust for thickness */
-                height: 100%; /* Full height for vertical line */
-                transform: translate(-50%, -50%);
+            &.hit::after {
+                background-color: rgba(255, 0, 0, 0.5);
                 animation: ripple 0.5s 0.2s 1;
                 -webkit-animation: ripple 0.5s 0.2s 1;
                 animation-delay: 0.35s;
@@ -138,19 +89,14 @@
             }
 
             &.miss::before {
-                background-color: rgba(
-                    0,
-                    153,
-                    255,
-                    0.5
-                ); /* Blue color for 'miss' */
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 100%; /* Full width for horizontal line */
-                height: 2px; /* Adjust for thickness */
-                transform: translate(-50%, -50%);
+                animation: miss 0.35s 0.175s 1;
+                -webkit-animation: miss 0.35s 0.175s 1;
+                -webkit-animation-fill-mode: forwards;
+                animation-fill-mode: forwards;
+            }
+
+            &.miss::after {
+                background-color: rgba(0, 153, 255, 0.5);
                 animation: ripple 0.5s 0.2s 1;
                 -webkit-animation: ripple 0.5s 0.2s 1;
                 animation-delay: 0.35s;
