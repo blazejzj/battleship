@@ -52,13 +52,15 @@
         .field {
             position: relative;
             cursor: crosshair;
+
             &::before {
                 @include pseudoOverlay;
                 transform: translate(-37.5rem, -40.625rem) rotate(-315deg);
                 height: 30%;
                 width: 12.5rem;
                 border: 0.1875rem solid #fefefe;
-                border-radius: 1rem;
+                /* Remove border-radius to prevent circles */
+                /* border-radius: 1rem; */ /* Commented out */
                 background-color: #fefefe;
                 opacity: 1;
                 transition: all 0.15s cubic-bezier(0.7, 0.03, 0.85, 0.43);
@@ -67,42 +69,78 @@
             &::after {
                 @include pseudoOverlay;
                 @include fullSize;
-                border-radius: 100%;
+                /* Remove border-radius to prevent circles */
+                /* border-radius: 100%; */ /* Commented out */
                 opacity: 0;
+                content: ""; /* Will set content in hit/miss states */
             }
 
             &.hit::before {
-                animation: shot 0.35s 0.175s 1;
-                -webkit-animation: shot 0.35s 0.175s 1;
-                -webkit-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
+                animation: shot 0.35s 0.175s 1 forwards;
+                -webkit-animation: shot 0.35s 0.175s 1 forwards;
             }
 
             &.hit::after {
-                background-color: rgba(255, 0, 0, 0.5);
-                animation: ripple 0.5s 0.2s 1;
-                -webkit-animation: ripple 0.5s 0.2s 1;
+                /* Use two pseudo-elements to form the cross */
+                background-color: transparent;
+                animation: none;
+            }
+
+            &.hit::after,
+            &.hit::before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 80%;
+                height: 4px; /* Thickness of the cross lines */
+                background-color: rgba(255, 0, 0, 0.5); /* Red for 'hit' */
+                transform-origin: center;
+                opacity: 0;
+                animation: showCrossLine 0.5s forwards;
                 animation-delay: 0.35s;
-                -webkit-animation-delay: 0.35s;
-                -webkit-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
+            }
+
+            &.hit::before {
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+
+            &.hit::after {
+                transform: translate(-50%, -50%) rotate(-45deg);
             }
 
             &.miss::before {
-                animation: miss 0.35s 0.175s 1;
-                -webkit-animation: miss 0.35s 0.175s 1;
-                -webkit-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
+                animation: miss 0.35s 0.175s 1 forwards;
+                -webkit-animation: miss 0.35s 0.175s 1 forwards;
             }
 
             &.miss::after {
-                background-color: rgba(0, 153, 255, 0.5);
-                animation: ripple 0.5s 0.2s 1;
-                -webkit-animation: ripple 0.5s 0.2s 1;
+                /* Use two pseudo-elements to form the cross */
+                background-color: transparent;
+                animation: none;
+            }
+
+            &.miss::after,
+            &.miss::before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 80%;
+                height: 4px; /* Thickness of the cross lines */
+                background-color: rgba(0, 153, 255, 0.5); /* Blue for 'miss' */
+                transform-origin: center;
+                opacity: 0;
+                animation: showCrossLine 0.5s forwards;
                 animation-delay: 0.35s;
-                -webkit-animation-delay: 0.35s;
-                -webkit-animation-fill-mode: forwards;
-                animation-fill-mode: forwards;
+            }
+
+            &.miss::before {
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+
+            &.miss::after {
+                transform: translate(-50%, -50%) rotate(-45deg);
             }
         }
     }
