@@ -91,26 +91,17 @@
                 brightness(96%) contrast(97%);
         }
         &::after {
-            display: block;
-            @include pseudoUnderlay;
-            box-sizing: border-box;
-            inset: unset;
-            top: -50%;
-            left: -50%;
-            margin: 0 auto;
-            border-right: solid 0.0625rem #87cfeb50;
-            width: 100%;
-            height: 100%;
-            border-radius: 100% 0 0 0;
-            transform-origin: 100% 100%;
-            background: linear-gradient(
-                50deg,
-                rgba(34, 34, 34, 0) 56%,
-                #70cdf1
-            );
-            -webkit-animation: sweep 3.5s infinite linear;
-            animation: sweep 3.5s infinite linear;
-            pointer-events: none;
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: rgba(112, 205, 241, 0.3); /* Pulse color */
+            border-radius: 50%; /* Make it a circle */
+            transform: translate(-50%, -50%);
+            animation: radarPulse 3s infinite; /* Duration and repeat */
+            pointer-events: none; /* Ensure it doesn't interfere with mouse events */
         }
         img {
             -webkit-filter: invert(67%) sepia(88%) saturate(286%)
