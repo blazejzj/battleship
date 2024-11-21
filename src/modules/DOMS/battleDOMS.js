@@ -193,14 +193,12 @@ class battleDOMS {
         const clickedField = event.target;
         this.disableField(clickedField);
 
-        // Player turn
         const playerTurnResult = await this.playerPlays(clickedField);
         if (playerTurnResult === "win" || playerTurnResult === "hit") {
             this.isPlayerTurn = true;
             return;
         }
 
-        // CPU turn
         let cpuTurnResult = await this.cpuPlays();
         if (cpuTurnResult === "win") {
             this.isPlayerTurn = true;
@@ -211,7 +209,6 @@ class battleDOMS {
             cpuTurnResult = await this.cpuPlays();
         }
 
-        // Player's turn can start again
         this.isPlayerTurn = true;
     }
 
@@ -281,6 +278,8 @@ class battleDOMS {
         this.addMissStyle(fieldNode);
         await this.timeoutMissileLength();
         Sound.miss();
+
+        await this.timeoutHalfSecond();
     }
 
     async cpuMiss(row, col) {
@@ -294,6 +293,8 @@ class battleDOMS {
         player.getGrid().getBoard()[row][col] = "miss";
         await this.timeoutMissileLength();
         Sound.miss();
+
+        await this.timeoutHalfSecond();
     }
 
     async playerHit(fieldNode) {
@@ -311,9 +312,9 @@ class battleDOMS {
         this.loadShipIfSunk({ cpu: cpuPlayer, battleship, row, col });
         await this.timeoutMissileLength();
         Sound.hit();
-        this.displayPlayerMessage(boardElement, battleship);
 
         await this.timeoutOneSecond();
+        this.displayPlayerMessage(boardElement, battleship);
 
         if (cpuPlayer.hasLost()) {
             return this.showPlayerWinModal();
@@ -338,14 +339,17 @@ class battleDOMS {
         player.getGrid().getBoard()[row][col] = "hit";
         await this.timeoutMissileLength();
         Sound.hit();
+
+        await this.timeoutOneSecond();
         this.displayEnemyMessage(boardElement, battleship);
+
         if (player.hasLost()) return this.showEnemyWinModal();
 
         return "hit";
     }
 
     async turnEnd(playerOrCpu) {
-        await this.timeoutOneAndHalfSecond();
+        await this.timeoutHalfSecond();
 
         if (playerOrCpu === "player") {
             this.styleOffTurn(document.querySelector(".message.battle.agent"));
@@ -550,7 +554,7 @@ class battleDOMS {
     }
 
     timeoutOneAndHalfSecond() {
-        return new Promise((resolve) => setTimeout(resolve, 1500));
+        return new Promise((resolve) => setTimeout(resolve, 750));
     }
 
     timeoutOneSecond() {
@@ -558,11 +562,11 @@ class battleDOMS {
     }
 
     timeoutHalfSecond() {
-        return new Promise((resolve) => setTimeout(resolve, 500));
+        return new Promise((resolve) => setTimeout(resolve, 300));
     }
 
     timeoutMissileLength() {
-        return new Promise((resolve) => setTimeout(resolve, 500));
+        return new Promise((resolve) => setTimeout(resolve, 300));
     }
 }
 
